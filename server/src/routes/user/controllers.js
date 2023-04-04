@@ -10,11 +10,10 @@ const { validateEdit } = require('../user/schema/editProfileSchema')
 const {
   validateChangePassword,
 } = require('../user/schema/changePasswordSchema')
-
 const { tryCatch } = require('../../utils/tryCatch')
 const isValidObjectId = require('../../utils/isValidObjectId')
 
-module.exports.registerUser = tryCatch(async (req, res, next) => {
+module.exports.registerUser = tryCatch(async (req, res) => {
   const { error } = validateSignup(req.body)
 
   if (error) throw new Error(error)
@@ -26,7 +25,7 @@ module.exports.registerUser = tryCatch(async (req, res, next) => {
     .send(response.user)
 })
 
-module.exports.loginUser = tryCatch(async (req, res, next) => {
+module.exports.loginUser = tryCatch(async (req, res) => {
   const { error } = validateLogin(req.body)
 
   if (error) throw new Error(error)
@@ -38,11 +37,11 @@ module.exports.loginUser = tryCatch(async (req, res, next) => {
     .send(response.user)
 })
 
-module.exports.logoutUser = tryCatch(async (req, res, next) =>
+module.exports.logoutUser = tryCatch(async (req, res) =>
   res.clearCookie('jwt').send('Logged out successfully!')
 )
 
-module.exports.fetchUserProfile = tryCatch(async (req, res, next) => {
+module.exports.fetchUserProfile = tryCatch(async (req, res) => {
   const userId = req.params.id
   isValidObjectId(userId)
 
@@ -51,7 +50,7 @@ module.exports.fetchUserProfile = tryCatch(async (req, res, next) => {
   return res.status(200).send(response)
 })
 
-module.exports.followUser = tryCatch(async (req, res, next) => {
+module.exports.followUser = tryCatch(async (req, res) => {
   const followerId = req.user._id
   const followedId = req.params.id
   isValidObjectId(followedId)
@@ -60,7 +59,7 @@ module.exports.followUser = tryCatch(async (req, res, next) => {
   res.status(200).send(resposne)
 })
 
-module.exports.unFollowUser = tryCatch(async (req, res, next) => {
+module.exports.unFollowUser = tryCatch(async (req, res) => {
   const followerId = req.user._id
   const followedId = req.params.id
   isValidObjectId(followedId)
@@ -69,7 +68,7 @@ module.exports.unFollowUser = tryCatch(async (req, res, next) => {
   return res.status(200).send(resposne)
 })
 
-module.exports.fetchFollowing = tryCatch(async (req, res, next) => {
+module.exports.fetchFollowing = tryCatch(async (req, res) => {
   const userId = req.params.id
   isValidObjectId(userId)
   const response = await userService.fetchFollowing(userId)
@@ -85,7 +84,7 @@ module.exports.fetchFollowers = tryCatch(async (req, res, next) => {
   return res.status(200).send(response)
 })
 
-module.exports.editUserProfile = tryCatch(async (req, res, next) => {
+module.exports.editUserProfile = tryCatch(async (req, res) => {
   const userId = req.user._id
 
   if (Object.keys(req.body).length === 0)
@@ -99,7 +98,7 @@ module.exports.editUserProfile = tryCatch(async (req, res, next) => {
   return res.status(200).send(response)
 })
 
-module.exports.changeUserPassword = tryCatch(async (req, res, next) => {
+module.exports.changeUserPassword = tryCatch(async (req, res) => {
   const { error } = validateChangePassword(req.body)
   if (error) throw new Error(error)
 
@@ -115,9 +114,9 @@ module.exports.changeUserPassword = tryCatch(async (req, res, next) => {
   return res.status(200).send(response)
 })
 
-module.exports.uploadUserAvatar = tryCatch(async (req, res, next) => {
-  const response = await userService.uploadUserAvatar()
+module.exports.uploadUserAvatar = tryCatch(async (req, res) => {
+  const response = await userService.uploadUserAvatar(req.user, req.file.buffer)
   return res.status(200).send(response)
 })
 
-module.exports.name = tryCatch(async (req, res, next) => {})
+module.exports.name = tryCatch(async (req, res) => {})

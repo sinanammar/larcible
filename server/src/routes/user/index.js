@@ -1,5 +1,6 @@
 const express = require('express')
 const { authUser } = require('../../middleware/authUser')
+const { upload } = require('../../utils/avatarMulterConfig')
 const {
   registerUser,
   loginUser,
@@ -26,7 +27,14 @@ router.get('/following/:id', authUser, fetchFollowing)
 router.get('/followers/:id', authUser, fetchFollowers)
 router.put('/edit/profile', authUser, editUserProfile)
 router.patch('/change/password', authUser, changeUserPassword)
-router.post('/upload/avatar', authUser, uploadUserAvatar)
+router.post(
+  '/upload/avatar',
+  authUser,
+  upload.single('avatar'),
+  uploadUserAvatar
+)
+// TODO: Add get, delete avatar endpoints
+// Add Delete Account
 
 // TODO: configure nodemailer to send an email on registration
 // TODO: ADD forgot password path with a security password sent to email

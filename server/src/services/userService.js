@@ -101,4 +101,8 @@ module.exports.changeUserPassword = async ({
   return user
 }
 
-module.exports.uploadUserAvatar = async () => {}
+module.exports.uploadUserAvatar = async (user, buffer) => {
+  user.avatar = buffer
+  await user.save()
+  return user
+}
