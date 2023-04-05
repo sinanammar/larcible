@@ -119,4 +119,19 @@ module.exports.uploadUserAvatar = tryCatch(async (req, res) => {
   return res.status(200).send(response)
 })
 
+module.exports.getUserAvatar = tryCatch(async (req, res) => {
+  const response = await userService.getUserAvatar(req.user)
+  return res.status(200).send(response)
+})
+
+module.exports.deleteUserAvatar = tryCatch(async (req, res) => {
+  const response = await userService.deleteUserAvatar(req.user)
+  return res.status(200).send(response)
+})
+
+module.exports.deleteAccount = tryCatch(async (req, res) => {
+  const response = await userService.deleteAccount(req.user._id)
+  return res.status(200).send(response)
+})
+
 module.exports.name = tryCatch(async (req, res) => {})

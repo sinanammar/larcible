@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 
 module.exports.registerUser = async (userData) => {
   const user = User(userData)
+
   const token = await user.generateAccessToken()
   await user.save()
 
@@ -31,7 +32,7 @@ module.exports.fetchUserProfile = async (userId) => {
 module.exports.followUser = async (followerId, followedId) => {
   await User.findByIdAndUpdate(followerId, {
     $addToSet: { following: followedId },
-  })
+  }).select('-avatar')
 
   return await User.findByIdAndUpdate(followedId, {
     $addToSet: { followers: followerId },
@@ -105,4 +106,22 @@ module.exports.uploadUserAvatar = async (user, buffer) => {
   user.avatar = buffer
   await user.save()
   return user
+}
+
+module.exports.getUserAvatar = async (user, buffer) => {
+  if (!user.avatar) {
+    return 'No avatar found!'
+  }
+  return user.avatar
+}
+
+module.exports.deleteUserAvatar = async (user, buffer) => {
+  user.avatar = null
+  await user.save()
+  return user
+}
+
+module.exports.deleteAccount = async (userId) => {
+  const deletedUser = await User.deleteOne({ _id: userId })
+  return deletedUser
 }

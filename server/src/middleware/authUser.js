@@ -1,5 +1,4 @@
 const AppError = require('../AppError')
-
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
@@ -16,7 +15,7 @@ const authUser = async (req, res, next) => {
         _id: validtoken._id,
       })
 
-      if (!user) throw new AppError('Invalid operation', 401)
+      if (!user) throw new AppError('Invalid operation. User not found.', 401)
 
       req.user = user
       req.token = token

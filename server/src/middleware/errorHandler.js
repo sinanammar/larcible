@@ -9,11 +9,14 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error instanceof AppError) {
+    console.log(error)
     return res.status(error.statusCode).json({
       errorMessage: error.message,
     })
   }
 
+  // send "something went wrong" eventually
+  // I am sending my uncaught errors to the client here
   return res.status(500).send(error.message)
 }
 

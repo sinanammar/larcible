@@ -1,9 +1,18 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-const jwt = require('jsonwebtoken')
+const WALLET_ENUM = [
+  'Metamask',
+  'Bitski',
+  'Alpha',
+  'Enjin',
+  'Wallet Connect',
+  'CoinBase',
+]
+
 const userSchema = new mongoose.Schema(
   {
     firstname: {
@@ -46,6 +55,12 @@ const userSchema = new mongoose.Schema(
     ],
     avatar: {
       type: Buffer,
+      default: null,
+    },
+    wallet: {
+      type: String,
+      enum: WALLET_ENUM,
+      message: 'Invalid wallet type.',
     },
   },
   {
@@ -55,8 +70,6 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre('save', async function (next) {
   const user = this
-  console.log(user.isModified('password'))
-  console.log('Pass middleware')
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8)
   }
