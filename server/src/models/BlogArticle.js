@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { ObjectId } = mongoose.Schema.Types
 
 const blogArticleSchema = new mongoose.Schema({
   title: {
@@ -23,7 +22,7 @@ const blogArticleSchema = new mongoose.Schema({
     required: true,
   },
   creator: {
-    type: ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
@@ -33,16 +32,18 @@ const blogArticleSchema = new mongoose.Schema({
   comments: [
     {
       user: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        // required: true,
       },
       content: {
         type: String,
+        required: true,
       },
       replies: [
         {
           user: {
-            type: ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
           },
           content: {
@@ -52,24 +53,12 @@ const blogArticleSchema = new mongoose.Schema({
             type: Date,
             default: Date.now,
           },
-          likes: [
-            {
-              type: ObjectId,
-              ref: 'User',
-            },
-          ],
         },
       ],
       createdAt: {
         type: Date,
         default: Date.now,
       },
-      likes: [
-        {
-          type: ObjectId,
-          ref: 'User',
-        },
-      ],
     },
   ],
 })

@@ -78,7 +78,7 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.generateAccessToken = async function () {
   const user = this
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ _id: user._id }, 'mysecret', {
     expiresIn: '1d',
   })
   const bearerToken = 'Bearer ' + token

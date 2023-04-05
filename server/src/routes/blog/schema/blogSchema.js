@@ -5,10 +5,9 @@ const validator = (schema) => (payload) =>
 
 const blogArticleValidation = Joi.object({
   title: Joi.string().required(),
-  body: Joi.string().min(400).required(),
+  body: Joi.string().min(10).required(),
   categories: Joi.array().min(1).required(),
-  creator: Joi.string().required(),
-  //   thumbnailPhoto: Joi.buffer().required(),
+  readingDuration: Joi.number().required(),
 })
 
 exports.validateBlogArticle = validator(blogArticleValidation)
