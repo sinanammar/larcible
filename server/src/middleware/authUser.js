@@ -1,7 +1,6 @@
-const AppError = require('../AppError')
-
-const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const AppError = require('../AppError')
+const User = require('../models/user')
 require('dotenv').config()
 
 const authUser = async (req, res, next) => {
@@ -32,7 +31,7 @@ function authRole(role) {
     if (req.user.role !== role) {
       return res.status(401).send('Not allowed')
     }
-    next()
+    return next()
   }
 }
 

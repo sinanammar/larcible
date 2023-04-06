@@ -1,6 +1,6 @@
 const AppError = require('../AppError')
 
-const errorHandler = (error, req, res, next) => {
+const errorHandler = (error, req, res) => {
   if (error.message.includes('ValidationError')) {
     return res.status(400).send({
       type: 'Validation Error!',
@@ -9,7 +9,6 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error instanceof AppError) {
-    console.log(error)
     return res.status(error.statusCode).json({
       errorMessage: error.message,
     })

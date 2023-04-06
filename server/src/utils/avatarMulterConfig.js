@@ -10,6 +10,6 @@ exports.upload = multer({
       return cb(new AppError('Please upload an image', 400))
     }
 
-    cb(null, true)
+    return cb(null, true)
   },
 })

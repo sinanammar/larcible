@@ -27,8 +27,8 @@ module.exports.deleteArticle = async (articleId, userId) => {
 
 module.exports.addComment = async ({ content, user, articleId }) => {
   const commentData = {
-    user: user,
-    content: content,
+    user,
+    content,
   }
   const article = await BlogArticle.findByIdAndUpdate(
     articleId,
@@ -53,8 +53,8 @@ module.exports.addCommentReply = async ({
   articleId,
 }) => {
   const commentData = {
-    user: user,
-    content: content,
+    user,
+    content,
   }
   const commentReply = await BlogArticle.findOneAndUpdate(
     {
@@ -68,8 +68,6 @@ module.exports.addCommentReply = async ({
       new: true,
     }
   )
-
-  console.log(commentReply)
 
   return commentReply
 }

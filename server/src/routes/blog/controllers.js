@@ -27,7 +27,7 @@ module.exports.deleteArticle = tryCatch(async (req, res) => {
 })
 
 module.exports.addComment = tryCatch(async (req, res) => {
-  const articleId = req.params.articleId
+  const {articleId} = req.params
   isValidObjectId(articleId)
 
   const { error } = validateComment(req.body)
@@ -46,8 +46,8 @@ module.exports.addComment = tryCatch(async (req, res) => {
 })
 
 module.exports.addCommentReply = tryCatch(async (req, res) => {
-  const articleId = req.params.articleId
-  const commentId = req.params.commentId
+  const {articleId} = req.params
+  const {commentId} = req.params
   // isValidObjectId(articleId)
   // isValidObjectId(commentId)
 

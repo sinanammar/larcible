@@ -19,7 +19,7 @@ app.use('/api/nft', nftRouter)
 app.use('/api/form', contactUsRouter)
 app.use('/api/blog', blogRouter)
 
-app.use('*', (req, res) => res.send('404! Not Found.'))
+app.use('*', (req, res) => res.send('404! URL Not Found.'))
 
 app.use(errorHandler)
 

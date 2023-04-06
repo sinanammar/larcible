@@ -1,7 +1,6 @@
 const Joi = require('joi')
 
-const validator = (schema) => (payload) =>
-  schema.validate(payload, { abortEarly: false })
+const validator = (schema) => (payload) => schema.validate(payload)
 
 const blogArticleValidation = Joi.object({
   title: Joi.string().required(),

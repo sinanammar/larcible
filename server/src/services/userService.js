@@ -1,6 +1,7 @@
+/* eslint-disable no-param-reassign */
+const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const AppError = require('../AppError')
-const bcrypt = require('bcrypt')
 
 module.exports.registerUser = async (userData) => {
   const user = User(userData)
@@ -34,9 +35,11 @@ module.exports.followUser = async (followerId, followedId) => {
     $addToSet: { following: followedId },
   }).select('-avatar')
 
-  return await User.findByIdAndUpdate(followedId, {
+  const followedUser =  await User.findByIdAndUpdate(followedId, {
     $addToSet: { followers: followerId },
   }).select('-password -email -role -createdAt -updatedAt')
+
+  return followedUser
 }
 
 module.exports.unFollowUser = async (followerId, followedId) => {
@@ -44,9 +47,11 @@ module.exports.unFollowUser = async (followerId, followedId) => {
     $pull: { following: followedId },
   })
 
-  return await User.findOneAndUpdate(followedId, {
+  const unFollowedUser =  await User.findOneAndUpdate(followedId, {
     $pull: { followers: followerId },
   }).select('-password -email -role -createdAt -updatedAt')
+
+  return unFollowedUser
 }
 
 module.exports.fetchFollowing = async (userId) => {
@@ -108,14 +113,14 @@ module.exports.uploadUserAvatar = async (user, buffer) => {
   return user
 }
 
-module.exports.getUserAvatar = async (user, buffer) => {
+module.exports.getUserAvatar = async (user) => {
   if (!user.avatar) {
     return 'No avatar found!'
   }
   return user.avatar
 }
 
-module.exports.deleteUserAvatar = async (user, buffer) => {
+module.exports.deleteUserAvatar = async (user) => {
   user.avatar = null
   await user.save()
   return user

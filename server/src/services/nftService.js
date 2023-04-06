@@ -20,8 +20,8 @@ module.exports.getNftDetails = async (contractAddress, tokenId) => {
   const nftDetails = await sdk.retrieveNftDetails({
     chain: 'ethereum',
     refresh_metadata: 'false',
-    contract_address: contractAddress, //'0x2bd938cf96430b7b0879f76b010b589aeec2127c',
-    token_id: tokenId, //'128690',
+    contract_address: contractAddress, // '0x2bd938cf96430b7b0879f76b010b589aeec2127c',
+    token_id: tokenId, // '128690',
   })
 
   if (nftDetails.data.response !== 'OK') {

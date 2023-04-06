@@ -4,12 +4,12 @@ const AppError = require('../../AppError')
 const userService = require('../../services/userService')
 
 // Schema validation
-const { validateSignup } = require('../user/schema/registerUserSchema')
-const { validateLogin } = require('../user/schema/loginUserSchema')
-const { validateEdit } = require('../user/schema/editProfileSchema')
+const { validateSignup } = require('./schema/registerUserSchema')
+const { validateLogin } = require('./schema/loginUserSchema')
+const { validateEdit } = require('./schema/editProfileSchema')
 const {
   validateChangePassword,
-} = require('../user/schema/changePasswordSchema')
+} = require('./schema/changePasswordSchema')
 const { tryCatch } = require('../../utils/tryCatch')
 const isValidObjectId = require('../../utils/isValidObjectId')
 
@@ -17,7 +17,7 @@ module.exports.registerUser = tryCatch(async (req, res) => {
   const { error } = validateSignup(req.body)
 
   if (error) throw new Error(error)
-
+  
   const response = await userService.registerUser(req.body)
   return res
     .status(200)
@@ -76,7 +76,7 @@ module.exports.fetchFollowing = tryCatch(async (req, res) => {
   return res.status(200).send(response)
 })
 
-module.exports.fetchFollowers = tryCatch(async (req, res, next) => {
+module.exports.fetchFollowers = tryCatch(async (req, res) => {
   const userId = req.params.id
   isValidObjectId(userId)
   const response = await userService.fetchFollowers(userId)
@@ -134,4 +134,4 @@ module.exports.deleteAccount = tryCatch(async (req, res) => {
   return res.status(200).send(response)
 })
 
-module.exports.name = tryCatch(async (req, res) => {})
+// module.exports.name = tryCatch(async (req, res) => {})

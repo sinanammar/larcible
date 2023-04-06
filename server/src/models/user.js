@@ -68,6 +68,9 @@ const userSchema = new mongoose.Schema(
   }
 )
 
+const User = mongoose.model('User', userSchema)
+module.exports = User
+
 userSchema.pre('save', async function (next) {
   const user = this
   if (user.isModified('password')) {
@@ -81,7 +84,7 @@ userSchema.methods.generateAccessToken = async function () {
   const token = jwt.sign({ _id: user._id }, 'mysecret', {
     expiresIn: '1d',
   })
-  const bearerToken = 'Bearer ' + token
+  const bearerToken = `Bearer ${  token}`
   return bearerToken
 }
 
@@ -95,5 +98,3 @@ userSchema.statics.authenticateUser = async function ({ firstname, password }) {
   return user
 }
 
-const User = mongoose.model('User', userSchema)
-module.exports = User

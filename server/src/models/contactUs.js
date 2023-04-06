@@ -12,12 +12,10 @@ const contactUsSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true,
       match: /^\S+@\S+\.\S+$/,
     },
     message: {

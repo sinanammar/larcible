@@ -1,13 +1,10 @@
-const ContactUs = require('../../models/contactUs')
 const { tryCatch } = require('../../utils/tryCatch')
 const { validateForm } = require('./schema/contactFormSchema')
 const formService = require('../../services/formService')
 
-module.exports.submitFormData = tryCatch(async (formData) => {
-  const { error } = validateForm(formData)
-
+module.exports.submitFormData = tryCatch(async (req, res) => {
+  const { error } = validateForm(req.body)
   if (error) throw new Error(error)
-  const resposne = await formService.submitFormData(formData)
-
-  return res.statua(200).send(resposne)
+  await formService.submitFormData(req.body)
+  return res.status(200).send({ message: 'Message sent successfully' })
 })

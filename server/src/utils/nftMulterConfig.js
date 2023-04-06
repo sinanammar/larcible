@@ -1,4 +1,5 @@
 const multer = require('multer')
+const AppError = require('../AppError')
 
 exports.upload = multer({
   storage: multer.diskStorage({
@@ -6,7 +7,7 @@ exports.upload = multer({
       cb(null, 'nftImages')
     },
     filename(req, file, cb) {
-      cb(null, Date.now() + '-' + file.originalname)
+      return cb(null, `${Date.now()}-${file.originalname}`)
     },
   }),
   limits: {
@@ -18,6 +19,6 @@ exports.upload = multer({
     if (!allowedMimeTypes.includes(file.mimetype)) {
       return cb(new AppError('Please upload an image', 400))
     }
-    cb(null, true)
+    return cb(null, true)
   },
 })
