@@ -1,32 +1,38 @@
 const { tryCatch } = require('../../utils/tryCatch')
 
 const nftService = require('../../services/nftService')
+const { validateNft } = require('../../schema/nftSchema')
 
-module.exports.uploadPhoto = tryCatch(async (req, res) => {})
-
-module.exports.getAllNfts = tryCatch(async (req, res) => {
-  const response = await nftService.getAllNfts()
-
+module.exports.getAllNFTs = tryCatch(async (req, res) => {
+  console.log('Hit')
+  const response = await nftService.getAllNFTs()
   return res.status(200).send(response)
 })
 
-module.exports.getNftDetails = tryCatch(async (req, res) => {
-  const contractAddress = req.query.contractAddress
-  const tokenId = req.query.tokenId
+module.exports.publishNft = tryCatch(async (req, res) => {
+  const { error } = validateNft(req.body)
 
-  console.log(req.query)
+  if (error) {
+    throw new Error(error)
+  }
 
-  const response = await nftService.getNftDetails(tokenId, contractAddress)
+  const nftData = req.body
+  nftData.owner = req.user._id
+  nftData.photo = req.file
 
+  const response = await nftService.publishNft(nftData)
+  return res.status(201).send(response)
+})
+
+module.exports.getNFTDetails = tryCatch(async (req, res) => {
+  const response = await nftService.getNFTDetails(req.params.nftId)
   return res.status(200).send(response)
 })
 
-module.exports.getTopRankingNfts = tryCatch(async (req, res) => {
-  const pageNumber = req.query.pageNumber
-  const timeFrame = req.query.timeFrame
-
+module.exports.getNFTsByCategory = tryCatch(async (req, res) => {
   console.log(req.query)
-  const response = await nftService.getTopRankingNfts(pageNumber, timeFrame)
+  const { cat } = req.params
+  const response = await nftService.getNFTsByCategory(cat)
 
   return res.status(200).send(response)
 })

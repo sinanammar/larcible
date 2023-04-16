@@ -4,14 +4,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-const WALLET_ENUM = [
-  'Metamask',
-  'Bitski',
-  'Alpha',
-  'Enjin',
-  'Wallet Connect',
-  'CoinBase',
-]
+const WALLET_ENUM = ['Metamask', 'Bitski', 'Alpha', 'Enjin', 'Wallet Connect', 'CoinBase']
 
 const userSchema = new mongoose.Schema(
   {
@@ -62,14 +55,14 @@ const userSchema = new mongoose.Schema(
       enum: WALLET_ENUM,
       message: 'Invalid wallet type.',
     },
+    balance: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 )
-
-const User = mongoose.model('User', userSchema)
-module.exports = User
 
 userSchema.pre('save', async function (next) {
   const user = this
@@ -81,14 +74,13 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.generateAccessToken = async function () {
   const user = this
-  const token = jwt.sign({ _id: user._id }, 'mysecret', {
-    expiresIn: '1d',
-  })
-  const bearerToken = `Bearer ${  token}`
+  const token = jwt.sign({ _id: user._id }, 'mysecret')
+  const bearerToken = `Bearer ${token}`
   return bearerToken
 }
 
 userSchema.statics.authenticateUser = async function ({ firstname, password }) {
+  // eslint-disable-next-line no-use-before-define
   const user = await User.findOne({ firstname })
   if (!user) throw new Error('Unable to log in, wrong credintials!')
 
@@ -98,3 +90,5 @@ userSchema.statics.authenticateUser = async function ({ firstname, password }) {
   return user
 }
 
+const User = mongoose.model('User', userSchema)
+module.exports = User

@@ -19,5 +19,6 @@ module.exports = {
     'no-unused-vars': 'warn',
     'no-console': 'off',
     'func-names': 'off',
+    'no-param-reassign': 'off',
   },
 }

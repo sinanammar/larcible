@@ -3,6 +3,7 @@ const AppError = require('../AppError')
 
 const isValidObjectId = (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
+    console.log(id)
     throw new AppError('Invalid Object ID.', 400)
   }
 

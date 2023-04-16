@@ -3,14 +3,16 @@ const blogService = require('../../services/blogService')
 const isValidObjectId = require('../../utils/isValidObjectId')
 const { tryCatch } = require('../../utils/tryCatch')
 
-const { validateBlogArticle } = require('./schema/blogSchema')
-const { validateComment } = require('./schema/commentSchema')
+const { validateBlogArticle } = require('../../schema/blogSchema')
+const { validateComment } = require('../../schema/commentSchema')
 
 module.exports.publishArticle = tryCatch(async (req, res) => {
   if (!req.user) throw new AppError('Unauthorized: No user found', 401)
 
   const { error } = validateBlogArticle(req.body)
-  if (error) throw new Error(error)
+  if (error) {
+    throw new Error(error)
+  }
 
   const resposne = await blogService.publishArticle(req.body, req.user._id)
   return res.status(200).send(resposne)
@@ -27,7 +29,7 @@ module.exports.deleteArticle = tryCatch(async (req, res) => {
 })
 
 module.exports.addComment = tryCatch(async (req, res) => {
-  const {articleId} = req.params
+  const { articleId } = req.params
   isValidObjectId(articleId)
 
   const { error } = validateComment(req.body)
@@ -46,10 +48,9 @@ module.exports.addComment = tryCatch(async (req, res) => {
 })
 
 module.exports.addCommentReply = tryCatch(async (req, res) => {
-  const {articleId} = req.params
-  const {commentId} = req.params
-  // isValidObjectId(articleId)
-  // isValidObjectId(commentId)
+  const { articleId, commentId } = req.params
+  isValidObjectId(articleId)
+  isValidObjectId(commentId)
 
   const { error } = validateComment(req.body)
   if (error) {
@@ -74,7 +75,26 @@ module.exports.getArticles = tryCatch(async (req, res) => {
 
 module.exports.getArticle = tryCatch(async (req, res) => {
   const response = await blogService.getArticle(req.params.articleId)
-  return res.status(201).send(response)
+  return res.status(200).send(response)
+})
+
+module.exports.deleteComment = tryCatch(async (req, res) => {
+  const { articleId, commentId } = req.params
+  isValidObjectId(articleId)
+  isValidObjectId(commentId)
+
+  await blogService.deleteComment(articleId, commentId)
+  return res.status(204).send()
+})
+
+module.exports.deleteCommentReply = tryCatch(async (req, res) => {
+  const { articleId, commentId, replyId } = req.params
+  isValidObjectId(articleId)
+  isValidObjectId(commentId)
+  isValidObjectId(replyId)
+
+  await blogService.deleteCommentReply(req.params)
+  return res.status(204).send()
 })
 
 // module.exports.name = tryCatch(async (req, res) => {

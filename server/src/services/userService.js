@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const AppError = require('../AppError')
@@ -20,9 +19,10 @@ module.exports.loginUser = async (userData) => {
   return { user, token }
 }
 
+// Add tryCatch
 module.exports.fetchUserProfile = async (userId) => {
   const userProfile = await User.findById({ _id: userId }).select(
-    '-password -role -updatedAt'
+    '-password -role -updatedAt',
   )
 
   if (!userProfile) throw new AppError('User not found!', 404)
@@ -35,7 +35,7 @@ module.exports.followUser = async (followerId, followedId) => {
     $addToSet: { following: followedId },
   }).select('-avatar')
 
-  const followedUser =  await User.findByIdAndUpdate(followedId, {
+  const followedUser = await User.findByIdAndUpdate(followedId, {
     $addToSet: { followers: followerId },
   }).select('-password -email -role -createdAt -updatedAt')
 
@@ -47,7 +47,7 @@ module.exports.unFollowUser = async (followerId, followedId) => {
     $pull: { following: followedId },
   })
 
-  const unFollowedUser =  await User.findOneAndUpdate(followedId, {
+  const unFollowedUser = await User.findOneAndUpdate(followedId, {
     $pull: { followers: followerId },
   }).select('-password -email -role -createdAt -updatedAt')
 
@@ -99,7 +99,7 @@ module.exports.changeUserPassword = async ({
   const user = await User.findByIdAndUpdate(
     { _id: userId },
     { password: hashedNewPassword },
-    { new: true }
+    { new: true },
   )
 
   if (!user) throw new AppError('User not found.', 404)

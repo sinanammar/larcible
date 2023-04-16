@@ -1,5 +1,5 @@
 const { tryCatch } = require('../../utils/tryCatch')
-const { validateForm } = require('./schema/contactFormSchema')
+const { validateForm } = require('../../schema/contactFormSchema')
 const formService = require('../../services/formService')
 
 module.exports.submitFormData = tryCatch(async (req, res) => {

@@ -1,23 +1,23 @@
 const AppError = require('../../AppError')
-
 // Services
 const userService = require('../../services/userService')
 
 // Schema validation
-const { validateSignup } = require('./schema/registerUserSchema')
-const { validateLogin } = require('./schema/loginUserSchema')
-const { validateEdit } = require('./schema/editProfileSchema')
-const {
-  validateChangePassword,
-} = require('./schema/changePasswordSchema')
+const { validateSignup } = require('../../schema/registerUserSchema')
+const { validateLogin } = require('../../schema/loginUserSchema')
+const { validateEdit } = require('../../schema/editProfileSchema')
+const { validateChangePassword } = require('../../schema/changePasswordSchema')
+
 const { tryCatch } = require('../../utils/tryCatch')
 const isValidObjectId = require('../../utils/isValidObjectId')
 
 module.exports.registerUser = tryCatch(async (req, res) => {
   const { error } = validateSignup(req.body)
 
-  if (error) throw new Error(error)
-  
+  if (error) {
+    throw new Error(error)
+  }
+
   const response = await userService.registerUser(req.body)
   return res
     .status(200)
@@ -28,7 +28,9 @@ module.exports.registerUser = tryCatch(async (req, res) => {
 module.exports.loginUser = tryCatch(async (req, res) => {
   const { error } = validateLogin(req.body)
 
-  if (error) throw new Error(error)
+  if (error) {
+    throw new Error(error)
+  }
 
   const response = await userService.loginUser(req.body)
   return res
@@ -38,7 +40,7 @@ module.exports.loginUser = tryCatch(async (req, res) => {
 })
 
 module.exports.logoutUser = tryCatch(async (req, res) =>
-  res.clearCookie('jwt').send('Logged out successfully!')
+  res.clearCookie('jwt').send('Logged out successfully!'),
 )
 
 module.exports.fetchUserProfile = tryCatch(async (req, res) => {
@@ -87,12 +89,15 @@ module.exports.fetchFollowers = tryCatch(async (req, res) => {
 module.exports.editUserProfile = tryCatch(async (req, res) => {
   const userId = req.user._id
 
-  if (Object.keys(req.body).length === 0)
+  if (Object.keys(req.body).length === 0) {
     throw new AppError('Request body cannot be empty', 400)
+  }
 
   const { error } = validateEdit(req.body)
 
-  if (error) throw new Error(error)
+  if (error) {
+    throw new Error(error)
+  }
   const response = await userService.editUserProfile(userId, req.body)
 
   return res.status(200).send(response)
@@ -100,7 +105,9 @@ module.exports.editUserProfile = tryCatch(async (req, res) => {
 
 module.exports.changeUserPassword = tryCatch(async (req, res) => {
   const { error } = validateChangePassword(req.body)
-  if (error) throw new Error(error)
+  if (error) {
+    throw new Error(error)
+  }
 
   const userData = {
     userId: req.user._id,

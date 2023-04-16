@@ -14,10 +14,15 @@ exports.upload = multer({
     fileSize: 10 * 1024 * 1024, // 10 MB
   },
   fileFilter(req, file, cb) {
-    const allowedMimeTypes = ['image/jpeg', 'image/jpg']
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/pdf']
 
     if (!allowedMimeTypes.includes(file.mimetype)) {
-      return cb(new AppError('Please upload an image', 400))
+      return cb(
+        new AppError(
+          'Please upload an image with one of the following forms jpeg, jpg, pdf. Max limit is 10MB',
+          400,
+        ),
+      )
     }
     return cb(null, true)
   },

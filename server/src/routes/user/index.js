@@ -33,12 +33,7 @@ router.put('/edit-profile', authUser, editUserProfile)
 router.patch('/change-password', authUser, changeUserPassword)
 router.get('/avatar', authUser, getUserAvatar)
 router.delete('/avatar', authUser, deleteUserAvatar)
-router.post(
-  '/upload/avatar',
-  authUser,
-  upload.single('avatar'),
-  uploadUserAvatar
-)
+router.post('/upload/avatar', authUser, upload.single('avatar'), uploadUserAvatar)
 router.delete('/delete-account', authUser, deleteAccount)
 
 // TODO: configure nodemailer to send an email on registration
