@@ -1,7 +1,9 @@
+const { isValidObjectId } = require('mongoose')
 const { tryCatch } = require('../../utils/tryCatch')
 
 const nftService = require('../../services/nftService')
 const { validateNft } = require('../../schema/nftSchema')
+const { validateBid } = require('../../schema/nftBidSchema')
 
 module.exports.getAllNFTs = tryCatch(async (req, res) => {
   console.log('Hit')
@@ -20,7 +22,7 @@ module.exports.publishNft = tryCatch(async (req, res) => {
   nftData.owner = req.user._id
   nftData.photo = req.file
 
-  const response = await nftService.publishNft(nftData)
+  const response = await nftService.publishNft(nftData, req.user)
   return res.status(201).send(response)
 })
 
@@ -30,9 +32,26 @@ module.exports.getNFTDetails = tryCatch(async (req, res) => {
 })
 
 module.exports.getNFTsByCategory = tryCatch(async (req, res) => {
-  console.log(req.query)
   const { cat } = req.params
   const response = await nftService.getNFTsByCategory(cat)
 
   return res.status(200).send(response)
+})
+
+module.exports.placeBidOnNFT = tryCatch(async (req, res) => {
+  isValidObjectId(req.params.nftId)
+  const { error } = validateBid(req.body)
+
+  if (error) {
+    throw new Error(error)
+  }
+
+  const bidData = {
+    bidderId: req.user._id,
+    nftId: req.params.nftId,
+    bidValue: req.body.bidValue,
+  }
+  const response = await nftService.placeBidOnNFT(bidData)
+
+  return res.status(201).send(response)
 })

@@ -141,4 +141,21 @@ module.exports.deleteAccount = tryCatch(async (req, res) => {
   return res.status(200).send(response)
 })
 
+module.exports.getCreatedNFTs = tryCatch(async (req, res) => {
+  const userId = req.params.userId.trim()
+  isValidObjectId(userId)
+
+  const response = await userService.getCreatedNFTs(userId)
+  return res.status(200).send(response)
+})
+
+module.exports.likeNFT = tryCatch(async (req, res) => {
+  const { nftId } = req.params
+  isValidObjectId(nftId)
+
+  const response = await userService.likeNFT(req.user._id, nftId, req.user)
+
+  return res.status(200).send(response)
+})
+
 // module.exports.name = tryCatch(async (req, res) => {})

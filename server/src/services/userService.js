@@ -130,3 +130,32 @@ module.exports.deleteAccount = async (userId) => {
   const deletedUser = await User.deleteOne({ _id: userId })
   return deletedUser
 }
+
+module.exports.getCreatedNFTs = async (userId) => {
+  const createdNFTs = await User.findById(userId).select('created').populate({
+    path: 'created',
+  })
+
+  return createdNFTs
+}
+
+module.exports.likeNFT = async (userId, nftId, user) => {
+  const isLiked = user.likes.filter((like) => like.toString() === nftId)
+
+  // if exists remove it from user likes
+  if (isLiked.length) {
+    const userLikes = user.likes.filter((like) => like.toString() !== nftId)
+    user.likes = userLikes
+    await user.save()
+    return userLikes
+  }
+
+  // it it does not exist add item to user likes
+  const trimmedNftId = nftId.trim()
+  user.likes.push(trimmedNftId)
+  await user.save()
+
+  return user.likes
+}
+
+// module.exports.name = async () => {}

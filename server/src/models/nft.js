@@ -58,6 +58,14 @@ const nftSchema = new mongoose.Schema({
     type: Number,
     required: requiredValidator('Time auction'),
   },
+  currentPrice: {
+    type: Number,
+    default() {
+      return this.minimumBid
+    },
+    required: requiredValidator('Time auction'),
+  },
+
   collectionName: {
     type: String,
   },

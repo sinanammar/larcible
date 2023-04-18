@@ -58,6 +58,24 @@ const userSchema = new mongoose.Schema(
     balance: {
       type: Number,
     },
+    created: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'NFT',
+      },
+    ],
+    onSale: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'NFT',
+      },
+    ],
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'NFT',
+      },
+    ],
   },
   {
     timestamps: true,

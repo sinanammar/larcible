@@ -17,6 +17,8 @@ const {
   deleteUserAvatar,
   getUserAvatar,
   deleteAccount,
+  getCreatedNFTs,
+  likeNFT,
 } = require('./controllers')
 
 const router = express.Router()
@@ -35,6 +37,9 @@ router.get('/avatar', authUser, getUserAvatar)
 router.delete('/avatar', authUser, deleteUserAvatar)
 router.post('/upload/avatar', authUser, upload.single('avatar'), uploadUserAvatar)
 router.delete('/delete-account', authUser, deleteAccount)
+
+router.get('/created/:userId', getCreatedNFTs)
+router.post('/like/:nftId', authUser, likeNFT)
 
 // TODO: configure nodemailer to send an email on registration
 // TODO: ADD forgot password path with a security password sent to email
