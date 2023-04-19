@@ -20,5 +20,6 @@ module.exports = {
     'no-console': 'off',
     'func-names': 'off',
     'no-param-reassign': 'off',
+    camelcase: ['error', { allow: ['express_1'] }],
   },
 }
