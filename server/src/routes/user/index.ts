@@ -1,5 +1,4 @@
 import express from 'express'
-
 import authUser from '../../middleware/authUser'
 
 import { upload } from '../../utils/avatarMulterConfig'

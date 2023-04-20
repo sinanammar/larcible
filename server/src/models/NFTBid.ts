@@ -1,6 +1,18 @@
-import mongoose from 'mongoose'
+import { Schema } from 'express-validator'
+import mongoose, { Types } from 'mongoose'
 
-const bidSchema = new mongoose.Schema({
+export interface IBid extends Document {
+  from: Types.ObjectId
+  to: Types.ObjectId
+  bidDate: Date
+  bidValue: number
+}
+export interface INFT extends Document, IBid {
+  item: Types.ObjectId
+  bids: IBid[]
+}
+
+const bidSchema = new mongoose.Schema<IBid>({
   from: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -22,7 +34,7 @@ const bidSchema = new mongoose.Schema({
   },
 })
 
-const nftSchema = new mongoose.Schema({
+const nftSchema = new mongoose.Schema<INFT>({
   item: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'NFT',

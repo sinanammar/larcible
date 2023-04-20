@@ -11,6 +11,7 @@ import userRouter from './routes/user/index'
 import contactUsRouter from './routes/contactUsForm/index'
 import nftRouter from './routes/NFT/index'
 import blogRouter from './routes/blog/index'
+import walletRouter from './routes/wallet/index'
 
 const app = express()
 const apiRouter = express.Router()
@@ -30,6 +31,7 @@ apiRouter.use('/user', userRouter)
 apiRouter.use('/nft', nftRouter)
 apiRouter.use('/form', contactUsRouter)
 apiRouter.use('/blog', blogRouter)
+apiRouter.use('/wallet', walletRouter)
 
 // Logging resposne
 

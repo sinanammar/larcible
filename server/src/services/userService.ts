@@ -3,10 +3,10 @@ import User from '../models/user'
 import AppError from '../AppError'
 
 // Interfaces
-import { UserInterface, IUserMethods, IEditPrfile } from '../types/user.interface'
+import { IUser, IUserMethods } from '../types/user.interface'
 import { ChangePasswordInterface } from '../types/changePassword.interface'
 
-const registerUser = async (userData: UserInterface) => {
+const registerUser = async (userData: IUser) => {
   const user = new User(userData)
 
   const token = user.generateAccessToken()
@@ -85,7 +85,10 @@ const fetchFollowers = async (userId: string) => {
   return followingList
 }
 
-const editUserProfile = async (userId: string, updates: IEditPrfile) => {
+const editUserProfile = async (
+  userId: string,
+  updates: { firstname: string; email: string },
+) => {
   const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updates, {
     new: true,
   })
@@ -120,20 +123,20 @@ const changeUserPassword = async ({
   return user
 }
 
-const uploadUserAvatar = async (user: UserInterface, buffer: any) => {
+const uploadUserAvatar = async (user: IUser, buffer: any) => {
   user.avatar = buffer
   await user.save()
   return user
 }
 
-const getUserAvatar = async (user: UserInterface) => {
+const getUserAvatar = async (user: IUser) => {
   if (!user.avatar) {
     return 'No avatar found!'
   }
   return user.avatar
 }
 
-const deleteUserAvatar = async (user: UserInterface) => {
+const deleteUserAvatar = async (user: IUser) => {
   user.avatar = null
   await user.save()
   return user
@@ -152,7 +155,7 @@ const getCreatedNFTs = async (userId: string) => {
   return createdNFTs
 }
 
-const likeNFT = async (userId: string, nftId: string, user: UserInterface) => {
+const likeNFT = async (userId: string, nftId: string, user: IUser) => {
   const isLiked = user.likes.filter((like: string) => like.toString() === nftId)
 
   // if exists remove it from user likes

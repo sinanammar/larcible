@@ -5,18 +5,16 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 require('dotenv').config()
 
-import { UserInterface, IUserMethods } from '../types/user.interface'
+import { IUser, IUserMethods } from '../types/user.interface'
 
-interface UserModel extends Model<UserInterface, {}, IUserMethods> {
+interface UserModel extends Model<IUser, {}, IUserMethods> {
   authenticateUser(
     firstname: string,
     password: string,
-  ): Promise<HydratedDocument<UserInterface, IUserMethods>>
+  ): Promise<HydratedDocument<IUser, IUserMethods>>
 }
 
-const WALLET_ENUM = ['Metamask', 'Bitski', 'Alpha', 'Enjin', 'Wallet Connect', 'CoinBase']
-
-const userSchema = new Schema<UserInterface, UserModel, IUserMethods>(
+const userSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     firstname: {
       type: String,
@@ -61,12 +59,8 @@ const userSchema = new Schema<UserInterface, UserModel, IUserMethods>(
       default: null,
     },
     wallet: {
-      type: String,
-      enum: WALLET_ENUM,
-      message: 'Invalid wallet type.',
-    },
-    balance: {
-      type: Number,
+      type: Schema.Types.ObjectId,
+      ref: 'Wallet',
     },
     created: [
       {
@@ -74,7 +68,7 @@ const userSchema = new Schema<UserInterface, UserModel, IUserMethods>(
         ref: 'NFT',
       },
     ],
-    onSale: [
+    ownedNFTs: [
       {
         type: Schema.Types.ObjectId,
         ref: 'NFT',
@@ -100,7 +94,7 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateAccessToken = function (): string {
   const user = this
   const token = jwt.sign({ _id: user._id }, 'mysecret')
   const bearerToken = `Bearer ${token}`
@@ -121,6 +115,10 @@ userSchema.static(
   },
 )
 
+const User = model<IUser, UserModel>('User', userSchema)
+
+export default User
+
 // userSchema.statics.authenticateUser = async function ({ firstname, password }) {
 //   // eslint-disable-next-line no-use-before-define
 //   const user = await User.findOne({ firstname })
@@ -131,6 +129,3 @@ userSchema.static(
 
 //   return user
 // }
-
-const User = model<UserInterface, UserModel>('User', userSchema)
-export default User

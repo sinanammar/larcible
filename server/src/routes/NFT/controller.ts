@@ -21,8 +21,9 @@ export const publishNft = tryCatch(async (req: Request, res: Response) => {
   const nftData = req.body
   nftData.owner = req.user._id
   nftData.photo = req.file
+  nftData.creator = req.user._id
 
-  const response = await nftService.publishNft(nftData, req.user)
+  const response = await nftService.publishNFT(nftData, req.user)
   return res.status(201).send(response)
 })
 
@@ -54,4 +55,20 @@ export const placeBidOnNFT = tryCatch(async (req: Request, res: Response) => {
   const response = await nftService.placeBidOnNFT(bidData)
 
   return res.status(201).send(response)
+})
+
+export const purchaseNFT = tryCatch(async (req: Request, res: Response) => {
+  const { nftId } = req.params
+  isValidObjectId(nftId)
+
+  const response = await nftService.purchaseNFT(nftId, req.user)
+  return res.status(200).send(response)
+})
+
+export const toggleNFTStatus = tryCatch(async (req: Request, res: Response) => {
+  const { nftId } = req.params
+  isValidObjectId(nftId)
+
+  const response = await nftService.toggleNFTStatus(nftId, req.user)
+  return res.status(200).send(response)
 })
