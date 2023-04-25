@@ -1,7 +1,8 @@
-import AppError from '../AppError'
-import Wallet from '../models/wallet'
-import { IWallet } from '../models/wallet'
 import mongoose from 'mongoose'
+import AppError from '../AppError'
+
+// Models
+import Wallet from '../models/wallet'
 
 const getWallet = async (userId: string) => {
   const wallet = await Wallet.findOne({ owner: userId })

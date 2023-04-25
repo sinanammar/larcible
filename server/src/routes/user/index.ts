@@ -1,5 +1,11 @@
 import express from 'express'
+// Middleware
 import authUser from '../../middleware/authUser'
+import paginate from '../../middleware/paginate'
+
+// Models
+import User from '../../models/user'
+import NFT from '../../models/nft'
 
 import { upload } from '../../utils/avatarMulterConfig'
 import {
@@ -18,7 +24,7 @@ import {
   getUserAvatar,
   deleteAccount,
   getCreatedNFTs,
-  likeNFT,
+  getOwnedNFTs,
 } from './controllers'
 
 const router = express.Router()
@@ -37,13 +43,7 @@ router.get('/avatar', authUser, getUserAvatar)
 router.delete('/avatar', authUser, deleteUserAvatar)
 router.post('/upload/avatar', authUser, upload.single('avatar'), uploadUserAvatar)
 router.delete('/delete-account', authUser, deleteAccount)
-
-router.get('/created/:userId', getCreatedNFTs)
-router.post('/like/:nftId', authUser, likeNFT)
-
-// TODO: configure nodemailer to send an email on registration
-// TODO: ADD forgot password path with a security password sent to email
-// sign in from google/facebook - 'remember me' feature
-// Add to User model -> Wallet,
+router.get('/orders', authUser, paginate(NFT), getOwnedNFTs)
+router.get('/created/:userId', authUser, paginate(NFT), getCreatedNFTs)
 
 export default router

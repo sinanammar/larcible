@@ -2,7 +2,7 @@
 import multer from 'multer'
 import AppError from '../AppError'
 
-exports.upload = multer({
+export const uploadNFT = multer({
   storage: multer.diskStorage({
     destination(req, file, cb) {
       cb(null, 'nftImages')

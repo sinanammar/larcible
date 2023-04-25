@@ -20,6 +20,7 @@ const nftItemValidation = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().min(1).required(),
   sellingMethod: Joi.string().required(),
+  // image: Joi.string().required(),
   royalties: Joi.string().required(),
   price: Joi.when('sellingMethod', {
     is: 'Fixed price',
@@ -48,6 +49,11 @@ const nftItemValidation = Joi.object({
   }),
   minimumBid: Joi.when('sellingMethod', {
     is: 'Time auction',
+    then: Joi.number().required(),
+    otherwise: Joi.forbidden(),
+  }),
+  numOfCopies: Joi.when('sellingMethod', {
+    is: 'Open for bid',
     then: Joi.number().required(),
     otherwise: Joi.forbidden(),
   }),

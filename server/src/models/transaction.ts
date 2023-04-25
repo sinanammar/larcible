@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document, Types, Model } from 'mongoose'
 
 export interface ITransaction extends Document {
-  from: Types.ObjectId
-  to: Types.ObjectId
+  from: mongoose.Types.ObjectId
+  to: mongoose.Types.ObjectId
   amount: number
-  item: Types.ObjectId
+  item: mongoose.Types.ObjectId
 }
 
 const transactionSchema = new mongoose.Schema<ITransaction>(
@@ -34,6 +34,9 @@ const transactionSchema = new mongoose.Schema<ITransaction>(
     versionKey: false,
   },
 )
+
+// Amount is quivalent to price in the design
+// use the ids to
 
 const Transaction = mongoose.model<ITransaction>('Transaction', transactionSchema)
 

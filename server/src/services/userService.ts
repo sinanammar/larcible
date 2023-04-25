@@ -1,10 +1,13 @@
-import bcrypt from 'bcrypt'
-import User from '../models/user'
 import AppError from '../AppError'
+import bcrypt from 'bcrypt'
+import mongoose from 'mongoose'
+// Models
+import User from '../models/user'
 
 // Interfaces
-import { IUser, IUserMethods } from '../types/user.interface'
-import { ChangePasswordInterface } from '../types/changePassword.interface'
+import { IUser, IUserMethods } from '../interfaces/user.interface'
+import { ChangePasswordInterface } from '../interfaces/changePassword.interface'
+import { IPagination } from '../interfaces/pagination.interface'
 
 const registerUser = async (userData: IUser) => {
   const user = new User(userData)
@@ -123,8 +126,8 @@ const changeUserPassword = async ({
   return user
 }
 
-const uploadUserAvatar = async (user: IUser, buffer: any) => {
-  user.avatar = buffer
+const uploadUserAvatar = async (user: IUser, avatarPath: string) => {
+  user.avatar = avatarPath
   await user.save()
   return user
 }
@@ -147,31 +150,31 @@ const deleteAccount = async (userId: string) => {
   return deletedUser
 }
 
-const getCreatedNFTs = async (userId: string) => {
-  const createdNFTs = await User.findById(userId).select('created').populate({
-    path: 'created',
-  })
+const getCreatedNFTs = async (userId: string, { startIndex, next }: IPagination) => {
+  const createdNFTs = await User.findById(userId)
+    .select('created')
+    .populate({
+      path: 'created',
+      options: {
+        limit: next.limit,
+        skip: startIndex,
+      },
+    })
 
   return createdNFTs
 }
 
-const likeNFT = async (userId: string, nftId: string, user: IUser) => {
-  const isLiked = user.likes.filter((like: string) => like.toString() === nftId)
-
-  // if exists remove it from user likes
-  if (isLiked.length) {
-    const userLikes = user.likes.filter((like: string) => like.toString() !== nftId)
-    user.likes = userLikes
-    await user.save()
-    return userLikes
-  }
-
-  // it it does not exist add item to user likes
-  const trimmedNftId = nftId.trim()
-  user.likes.push(trimmedNftId)
-  await user.save()
-
-  return user.likes
+const getOwnedNFTs = async (userId: string, { startIndex, next }: IPagination) => {
+  const ownedNFTs = await User.find({ _id: userId })
+    .select('ownedNFTs')
+    .populate({
+      path: 'ownedNFTs',
+      options: {
+        limit: next.limit,
+        skip: startIndex,
+      },
+    })
+  return ownedNFTs
 }
 
 // const name = async () => {}
@@ -190,6 +193,6 @@ export default {
   deleteUserAvatar,
   deleteAccount,
   getCreatedNFTs,
-  likeNFT,
   fetchUserProfile,
+  getOwnedNFTs,
 }

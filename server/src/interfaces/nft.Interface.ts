@@ -6,10 +6,11 @@ export interface INft {
   price: string
   size: string
   royalties: string
+  creator: string
 }
 
 export interface IBid {
   bidderId: string
   nftId: string
-  bidValue: number
+  bidValue: any
 }

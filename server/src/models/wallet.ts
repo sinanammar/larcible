@@ -33,21 +33,6 @@ const WalletSchema: Schema = new Schema<IWallet, Model<IWallet>>(
       required: true,
       enum: ['BTC', 'ETH', 'XRP', 'LTC', 'BCH'],
     },
-    // coins: [
-    //   {
-    //     type: {
-    //       type: String,
-    //       required: true,
-    //       enum: ['BTC', 'ETH', 'XRP', 'LTC', 'BCH'],
-    //     },
-    //     balance: {
-    //       type: Number,
-    //       default: 1000,
-    //       min: [0, 'Balance cannot be negative.'],
-    //     },
-    //   },
-    // ],
-
     owner: {
       type: mongoose.Types.ObjectId,
       ref: 'User',

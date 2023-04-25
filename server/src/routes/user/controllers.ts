@@ -124,7 +124,7 @@ export const changeUserPassword = tryCatch(async (req: Request, res: Response) =
 })
 
 export const uploadUserAvatar = tryCatch(async (req: Request, res: Response) => {
-  const response = await userService.uploadUserAvatar(req.user, req.file!.buffer)
+  const response = await userService.uploadUserAvatar(req.user, req.file!.filename)
   return res.status(200).send(response)
 })
 
@@ -147,17 +147,22 @@ export const getCreatedNFTs = tryCatch(async (req: Request, res: Response) => {
   const userId = req.params.userId.trim()
   isValidObjectId(userId)
 
-  const response = await userService.getCreatedNFTs(userId)
-  return res.status(200).send(response)
+  const response = await userService.getCreatedNFTs(userId, req.paginationInfo)
+  const result = {
+    response,
+    ...req.paginationInfo,
+  }
+  return res.status(200).send(result)
 })
 
-export const likeNFT = tryCatch(async (req: Request, res: Response) => {
-  const { nftId } = req.params
-  isValidObjectId(nftId)
+export const getOwnedNFTs = tryCatch(async (req: Request, res: Response) => {
+  const response = await userService.getOwnedNFTs(req.user._id, req.paginationInfo)
+  const result = {
+    response,
+    ...req.paginationInfo,
+  }
 
-  const response = await userService.likeNFT(req.user._id, nftId, req.user)
-
-  return res.status(200).send(response)
+  return res.status(200).send(result)
 })
 
 // export const name = tryCatch(async (req: Request, res: Response) => {})

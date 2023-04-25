@@ -1,7 +1,15 @@
 import AppError from '../AppError'
+
+// Models
 import BlogArticle from '../models/BlogArticle'
 
-import { IComment, IReply, IBlogArticle, IDeleteReply } from '../types/blog.Interface'
+// Interfaces
+import {
+  IComment,
+  IReply,
+  IBlogArticle,
+  IDeleteReply,
+} from '../interfaces/blog.Interface'
 
 const publishArticle = async (articleContent: IBlogArticle, userId: string) => {
   // eslint-disable-next-line node/no-unsupported-features/es-syntax
@@ -74,8 +82,14 @@ const addCommentReply = async ({ content, user, commentId, articleId }: IReply) 
   return commentReply
 }
 
-const getArticles = async () => {
-  const articles = await BlogArticle.find()
+const getArticles = async ({
+  startIndex,
+  next,
+}: {
+  startIndex: number
+  next: { limit: number; page: number }
+}) => {
+  const articles = await BlogArticle.find().limit(next.limit).skip(startIndex)
   return articles
 }
 

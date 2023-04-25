@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { isValidObjectId } from 'mongoose'
+import Transaction from '../../models/transaction'
 import { tryCatch } from '../../utils/tryCatch'
 
 import nftService from '../../services/nftService'
@@ -7,8 +8,13 @@ import { validateNft } from '../../schema/nftSchema'
 import { validateBid } from '../../schema/nftBidSchema'
 
 export const getAllNFTs = tryCatch(async (req: Request, res: Response) => {
-  const response = await nftService.getAllNFTs()
-  return res.status(200).send(response)
+  const response = await nftService.getAllNFTs(req.paginationInfo)
+  const results = {
+    result: response,
+    ...req.paginationInfo,
+  }
+  console.log(req.paginationInfo)
+  return res.status(200).send(results)
 })
 
 export const publishNft = tryCatch(async (req: Request, res: Response) => {
@@ -20,7 +26,7 @@ export const publishNft = tryCatch(async (req: Request, res: Response) => {
 
   const nftData = req.body
   nftData.owner = req.user._id
-  nftData.photo = req.file
+  // nftData.image = req.file!.filename
   nftData.creator = req.user._id
 
   const response = await nftService.publishNFT(nftData, req.user)
@@ -34,9 +40,14 @@ export const getNFTDetails = tryCatch(async (req: Request, res: Response) => {
 
 export const getNFTsByCategory = tryCatch(async (req: Request, res: Response) => {
   const { cat } = req.params
-  const response = await nftService.getNFTsByCategory(cat)
+  const response = await nftService.getNFTsByCategory(cat, req.paginationInfo)
 
-  return res.status(200).send(response)
+  const result = {
+    response,
+    ...req.paginationInfo,
+  }
+
+  return res.status(200).send(result)
 })
 
 export const placeBidOnNFT = tryCatch(async (req: Request, res: Response) => {
@@ -71,4 +82,50 @@ export const toggleNFTStatus = tryCatch(async (req: Request, res: Response) => {
 
   const response = await nftService.toggleNFTStatus(nftId, req.user)
   return res.status(200).send(response)
+})
+
+export const placeOpenBidOnNFT = tryCatch(async (req: Request, res: Response) => {
+  const { nftId } = req.params
+  const { bidValue } = req.body
+  isValidObjectId(nftId)
+
+  const response = await nftService.placeOpenBidOnNFT(nftId, req.user, bidValue)
+  return res.status(200).send(response)
+})
+
+export const acceptBid = tryCatch(async (req: Request, res: Response) => {
+  const { nftId, bidderId, bidAmount } = req.params
+  // const { bidValue } = req.body
+  isValidObjectId(nftId)
+  isValidObjectId(bidderId)
+
+  const bidValue = Number(bidAmount)
+
+  const bidData = {
+    bidderId,
+    nftId,
+    bidValue,
+  }
+
+  const response = await nftService.acceptBid(bidData, req.user)
+  return res.status(200).send(response)
+})
+
+export const likeNFT = tryCatch(async (req: Request, res: Response) => {
+  const { nftId } = req.params
+  isValidObjectId(nftId)
+
+  const response = await nftService.likeNFT(req.user._id, nftId, req.user)
+
+  return res.status(200).send(response)
+})
+
+export const getTransactions = tryCatch(async (req: Request, res: Response) => {
+  const response = await nftService.getTransactions(req.paginationInfo)
+  const result = {
+    response,
+    ...req.paginationInfo,
+  }
+
+  return res.status(200).send(result)
 })

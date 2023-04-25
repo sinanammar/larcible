@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import AppError from '../../AppError'
-import blogService from '../../services/blogService'
-import isValidObjectId from '../../utils/isValidObjectId'
 import { tryCatch } from '../../utils/tryCatch'
+import isValidObjectId from '../../utils/isValidObjectId'
+
+import blogService from '../../services/blogService'
 
 import { validateBlogArticle } from '../../schema/blogSchema'
 import { validateComment } from '../../schema/commentSchema'
@@ -70,8 +71,12 @@ export const addCommentReply = tryCatch(async (req: Request, res: Response) => {
 })
 
 export const getArticles = tryCatch(async (req: Request, res: Response) => {
-  const response = await blogService.getArticles()
-  return res.status(201).send(response)
+  const response = await blogService.getArticles(req.paginationInfo)
+  const results = {
+    response,
+    ...req.paginationInfo,
+  }
+  return res.status(201).send(results)
 })
 
 export const getArticle = tryCatch(async (req: Request, res: Response) => {

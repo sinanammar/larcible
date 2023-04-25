@@ -1,4 +1,6 @@
 import express from 'express'
+import BlogArticle from '../../models/BlogArticle'
+import paginate from '../../middleware/paginate'
 
 import {
   addComment,
@@ -11,7 +13,7 @@ import {
 
 const router = express.Router()
 
-router.get('/', getArticles)
+router.get('/', paginate(BlogArticle), getArticles)
 router.get('/:articleId', getArticle)
 router.post('/:articleId/comments', addComment)
 router.post('/:articleId/comments/:commentId/replies', addCommentReply)

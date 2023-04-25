@@ -5,9 +5,10 @@ declare global {
   namespace Express {
     interface Request {
       user: User
-      file: Buffer
+      fileName: string
       token: string
       params: object
+      paginationInfo: any
     }
   }
 }

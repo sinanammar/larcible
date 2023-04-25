@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 require('dotenv').config()
 
-import { IUser, IUserMethods } from '../types/user.interface'
+import { IUser, IUserMethods } from '../interfaces/user.interface'
 
 interface UserModel extends Model<IUser, {}, IUserMethods> {
   authenticateUser(
@@ -55,7 +55,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
       },
     ],
     avatar: {
-      type: Buffer,
+      type: String,
       default: null,
     },
     wallet: {
@@ -70,6 +70,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     ],
     ownedNFTs: [
       {
+        // equivalent to 'My Orders' in the design
         type: Schema.Types.ObjectId,
         ref: 'NFT',
       },

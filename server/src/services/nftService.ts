@@ -5,23 +5,25 @@ import AppError from '../AppError'
 import NFT from '../models/nft'
 import NFTBid from '../models/NFTBid'
 import User from '../models/user'
-import wallet from '../models/wallet'
+import Wallet from '../models/wallet'
 import Transaction from '../models/transaction'
 
 // Interfaces
-import { IBid, INft } from '../types/nftInterface'
-import { IUser } from '../types/user.interface'
+import { IBid, INft } from '../interfaces/nft.Interface'
+import { IUser } from '../interfaces/user.interface'
 import { ITransaction } from '../models/transaction'
+import { IPagination } from '../interfaces/pagination.interface'
 
 import { verifyUserWalletFunds } from '../utils/verifyUserWalletFunds'
+import updateWallets from '../utils/updateWallets'
 
-const getAllNFTs = async () => {
-  const NFTs = await NFT.find()
+const getAllNFTs = async ({ next, startIndex }: IPagination) => {
+  const NFTs = await NFT.find().limit(next.limit).skip(startIndex)
   return NFTs
 }
 
 const publishNFT = async (nftData: INft, user: IUser) => {
-  const userWallet = await wallet.findOne({ owner: user._id })
+  const userWallet = await Wallet.findOne({ owner: user._id })
 
   if (!userWallet) {
     throw new AppError('User need to connect a wallet before creating an NFT', 400)
@@ -52,9 +54,17 @@ const getNFTDetails = async (nftId: string) => {
   return nft
 }
 
-const getNFTsByCategory = async (category: string) => {
-  const nft = await NFT.find({ category })
-
+const getNFTsByCategory = async (
+  category: string,
+  {
+    startIndex,
+    next,
+  }: {
+    next: { limit: number; page: number }
+    startIndex: number
+  },
+) => {
+  const nft = await NFT.find({ category }).limit(next.limit).skip(startIndex)
   if (!nft) {
     throw new AppError('Item not found!', 404)
   }
@@ -63,6 +73,7 @@ const getNFTsByCategory = async (category: string) => {
 }
 
 // TODO: Subtract the amount from the bidder wallet/ freeze it till the aution ends
+// TODO: write an API to transform the ownership once the auction time-frame finishes
 const placeBidOnNFT = async ({ bidderId, nftId, bidValue }: IBid) => {
   await verifyUserWalletFunds(bidderId)
 
@@ -111,7 +122,7 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
   }
 
   if (nft.sellingMethod !== 'Fixed price') {
-    throw new AppError('NFT has to be sold as Fixed price', 400)
+    throw new AppError('NFT has to be listed as Fixed price', 400)
   }
 
   if (!(buyerWallet.balance! >= nft.price!)) {
@@ -123,19 +134,25 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
     throw new AppError('Something went wrong!', 500)
   }
 
-  const nftObjectId = new mongoose.Types.ObjectId(nftId)
+  const royaltiesCreatorPayment = (nft.royalties * nft.price!) / 100
+  const nftOwnerPayment = nft.price! - royaltiesCreatorPayment
 
-  // Update the wallets
+  // Updating the wallets - Payments goes to NFT owner & creator
   await Promise.all([
-    wallet.updateOne({ owner: currentOwner._id }, { $inc: { balance: nft.price } }),
-    wallet.updateOne({ owner: buyer._id }, { $inc: { balance: -nft.price! } }),
+    Wallet.updateOne({ owner: currentOwner._id }, { $inc: { balance: nftOwnerPayment } }),
+    Wallet.updateOne(
+      { owner: nft.creator },
+      { $inc: { balance: royaltiesCreatorPayment } },
+    ),
+    Wallet.updateOne({ owner: buyer._id }, { $inc: { balance: -nft.price! } }),
   ])
 
   // Converting IDs to Object IDs
+  const nftObjectId = new mongoose.Types.ObjectId(nftId)
   const buyerObjectId = new mongoose.Types.ObjectId(buyer._id)
   const ownerObjectId = new mongoose.Types.ObjectId(currentOwner._id)
 
-  // Transfer the ownership of the NFT
+  // Transfer NFT ownership
   await currentOwner.updateOne({
     $pull: { ownedNFTs: nftObjectId },
   })
@@ -146,7 +163,7 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
   nft.owner = buyerObjectId
   await nft.save()
 
-  // Registe trnsaction
+  // Register trnsaction
   const transactionData = {
     from: buyerObjectId,
     to: ownerObjectId,
@@ -167,7 +184,7 @@ const toggleNFTStatus = async (nftId: string, owner: IUser) => {
   const nft = await NFT.findOne({ _id: nftObjectId })
 
   if (!nft) {
-    throw new AppError('NFT not found', 400)
+    throw new AppError('NFT not found', 404)
   }
 
   if (!ownerObjectId.equals(nft.owner)) {
@@ -181,12 +198,136 @@ const toggleNFTStatus = async (nftId: string, owner: IUser) => {
   return true
 }
 
+// Use Socket.io
+const placeOpenBidOnNFT = async (nftId: string, buyer: IUser, bidValue: number) => {
+  const buyerWallet = await verifyUserWalletFunds(buyer._id)
+  const nftObjectId = new mongoose.Types.ObjectId(nftId)
+
+  const nft = await NFT.findById(nftObjectId)
+  if (!nft) {
+    throw new AppError('NFT not found!', 404)
+  }
+
+  if (nft.sellingMethod !== 'Open for bid') {
+    throw new AppError('NFT has to be listed as Open for bid', 400)
+  }
+
+  console.log('Hit')
+  // Use Socket.io to manage sending notification to the owner
+  return true
+}
+
+// on the client this will be triggered whenever a user Accepts an Open bid
+// Repeated code
+const acceptBid = async ({ nftId, bidderId, bidValue }: IBid, currentOwner: IUser) => {
+  await verifyUserWalletFunds(bidderId)
+
+  const ownerObjectId = new mongoose.Types.ObjectId(currentOwner._id)
+  const bidderObjectId = new mongoose.Types.ObjectId(bidderId)
+  const nftObjectId = new mongoose.Types.ObjectId(nftId)
+
+  const bidder = await User.findOne(bidderObjectId)
+
+  if (!bidder) {
+    throw new AppError('Bidder account not found!', 404)
+  }
+
+  const nft = await NFT.findOne({ _id: nftObjectId })
+
+  if (!nft) {
+    throw new AppError('NFT not found', 404)
+  }
+
+  if (!ownerObjectId.equals(nft.owner)) {
+    throw new AppError('Unauthorized operation!', 401)
+  }
+
+  const royaltiesCreatorPayment = (nft.royalties * bidValue) / 100
+  const nftOwnerPayment = (bidValue - royaltiesCreatorPayment) as Number
+
+  await Promise.all([
+    Wallet.updateOne({ owner: currentOwner._id }, { $inc: { balance: nftOwnerPayment } }),
+    Wallet.updateOne(
+      { owner: nft.creator },
+      { $inc: { balance: royaltiesCreatorPayment } },
+    ),
+    Wallet.updateOne({ owner: bidderObjectId }, { $inc: { balance: -bidValue } }),
+  ])
+
+  // Transfer NFT ownership
+  await currentOwner.updateOne({
+    $pull: { ownedNFTs: nftObjectId },
+  })
+
+  bidder.ownedNFTs.push(nftObjectId)
+  await bidder.save()
+
+  nft.owner = bidderObjectId
+  await nft.save()
+
+  // Register trnsaction
+  const transactionData = {
+    from: bidderObjectId,
+    to: ownerObjectId,
+    amount: bidValue,
+    item: nftObjectId,
+  } as ITransaction
+
+  const transaction = new Transaction(transactionData)
+  await transaction.save()
+
+  return transaction
+}
+
+const likeNFT = async (userId: string, nftId: string, user: IUser) => {
+  const isLiked = user.likes.filter((like: string) => like.toString() === nftId)
+
+  // if exists remove it from user likes
+  if (isLiked.length) {
+    const userLikes = user.likes.filter((like: string) => like.toString() !== nftId)
+    user.likes = userLikes
+    await user.save()
+    return userLikes
+  }
+
+  // it it does not exist add item to user likes
+  const trimmedNftId = nftId.trim()
+  user.likes.push(trimmedNftId)
+  await user.save()
+
+  return user.likes
+}
+
+// Cast to ObjectId failed for value "{ _id: 'activity' }" (type Object) at path "_id" for model "NFT"
+const getTransactions = async ({
+  next,
+  startIndex,
+}: {
+  next: { limit: number; page: number }
+  startIndex: number
+}) => {
+  const transactions = await Transaction.find()
+    .populate('from', 'firstname email _id')
+    .populate('to', 'firstname email _id')
+    .populate({
+      path: 'item',
+      select: 'image',
+    })
+    .limit(next.limit)
+    .skip(startIndex)
+  return transactions
+}
+
 export default {
-  getAllNFTs,
   publishNFT,
   getNFTDetails,
   getNFTsByCategory,
   placeBidOnNFT,
   purchaseNFT,
   toggleNFTStatus,
+  placeOpenBidOnNFT,
+  acceptBid,
+  likeNFT,
+  getAllNFTs,
+  getTransactions,
 }

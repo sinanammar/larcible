@@ -1,5 +1,5 @@
 import { Document, Types } from 'mongoose'
-import { INft } from './nftInterface'
+import { INft } from './nft.Interface'
 
 export interface IUser extends Document {
   _id: number
@@ -9,7 +9,7 @@ export interface IUser extends Document {
   role?: string
   followers: Types.ObjectId //Document['_id'][]
   following: Types.ObjectId //Document['_id'][]
-  avatar?: Buffer | null
+  avatar?: string | null
   wallet?: string
   created: Types.DocumentArray<INft> //Document['_id'][]
   ownedNFTs: Types.DocumentArray<INft> //Document['_id'][]

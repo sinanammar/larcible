@@ -1,4 +1,3 @@
-import { boolean } from 'joi'
 import mongoose from 'mongoose'
 
 const requiredValidator = (method: string) =>
@@ -17,11 +16,10 @@ const nftSchema = new mongoose.Schema({
   },
   status: {
     type: Boolean,
-    default: 'onSale',
-    enum: [true ? 'onSale' : 'hold'],
+    // true -> onSale, false -> Hold
   },
   image: {
-    type: Buffer,
+    type: String,
     // required: true,
   },
   owner: {
@@ -37,6 +35,10 @@ const nftSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ['Fixed price', 'Time auction', 'Open for bid'],
+  },
+  numOfCopies: {
+    type: Number,
+    required: requiredValidator('Open for bid'),
   },
   // properties for Fixed Price
   category: {
