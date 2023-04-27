@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import { tryCatch } from '../utils/tryCatch'
 
 const paginate = (model: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {

@@ -13,7 +13,7 @@ import nftRouter from './routes/NFT/index'
 import blogRouter from './routes/blog/index'
 import walletRouter from './routes/wallet/index'
 
-const app = express()
+export const app = express()
 const apiRouter = express.Router()
 const PORT = 3000
 
@@ -39,3 +39,5 @@ app.use('*', (req, res) => res.send('404! URL Not Found.'))
 app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`Server is up on port ${PORT}`))
+
+// Add status successus / failure in Transaction model

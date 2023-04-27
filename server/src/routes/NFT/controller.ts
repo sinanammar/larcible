@@ -1,11 +1,13 @@
 import { Request, Response } from 'express'
-import { isValidObjectId } from 'mongoose'
-import Transaction from '../../models/transaction'
+
+import isValidObjectId from '../../utils/isValidObjectId'
 import { tryCatch } from '../../utils/tryCatch'
 
 import nftService from '../../services/nftService'
+
 import { validateNft } from '../../schema/nftSchema'
 import { validateBid } from '../../schema/nftBidSchema'
+import AppError from '../../AppError'
 
 export const getAllNFTs = tryCatch(async (req: Request, res: Response) => {
   const response = await nftService.getAllNFTs(req.paginationInfo)
@@ -89,13 +91,16 @@ export const placeOpenBidOnNFT = tryCatch(async (req: Request, res: Response) =>
   const { bidValue } = req.body
   isValidObjectId(nftId)
 
+  if (!bidValue || bidValue <= 0) {
+    throw new AppError('Must provide a bid value', 400)
+  }
+
   const response = await nftService.placeOpenBidOnNFT(nftId, req.user, bidValue)
   return res.status(200).send(response)
 })
 
 export const acceptBid = tryCatch(async (req: Request, res: Response) => {
   const { nftId, bidderId, bidAmount } = req.params
-  // const { bidValue } = req.body
   isValidObjectId(nftId)
   isValidObjectId(bidderId)
 

@@ -8,5 +8,3 @@ export const tryCatch =
       next(error)
     }
   }
-
-// export default tryCatch

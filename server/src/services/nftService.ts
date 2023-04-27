@@ -15,7 +15,8 @@ import { ITransaction } from '../models/transaction'
 import { IPagination } from '../interfaces/pagination.interface'
 
 import { verifyUserWalletFunds } from '../utils/verifyUserWalletFunds'
-import updateWallets from '../utils/updateWallets'
+import checkWalletExists from '../utils/checkWalletExists'
+import updateWallet from '../utils/updateWallet'
 
 const getAllNFTs = async ({ next, startIndex }: IPagination) => {
   const NFTs = await NFT.find().limit(next.limit).skip(startIndex)
@@ -117,6 +118,7 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
   const buyerWallet = await verifyUserWalletFunds(buyer._id)
 
   const nft = await NFT.findById(nftId)
+
   if (!nft) {
     throw new AppError('NFT not found!', 404)
   }
@@ -125,7 +127,7 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
     throw new AppError('NFT has to be listed as Fixed price', 400)
   }
 
-  if (!(buyerWallet.balance! >= nft.price!)) {
+  if (buyerWallet.balance! < nft.price!) {
     throw new AppError('No sufficient funds!', 400)
   }
 
@@ -134,23 +136,44 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
     throw new AppError('Something went wrong!', 500)
   }
 
-  const royaltiesCreatorPayment = (nft.royalties * nft.price!) / 100
-  const nftOwnerPayment = nft.price! - royaltiesCreatorPayment
-
-  // Updating the wallets - Payments goes to NFT owner & creator
-  await Promise.all([
-    Wallet.updateOne({ owner: currentOwner._id }, { $inc: { balance: nftOwnerPayment } }),
-    Wallet.updateOne(
-      { owner: nft.creator },
-      { $inc: { balance: royaltiesCreatorPayment } },
-    ),
-    Wallet.updateOne({ owner: buyer._id }, { $inc: { balance: -nft.price! } }),
-  ])
-
   // Converting IDs to Object IDs
   const nftObjectId = new mongoose.Types.ObjectId(nftId)
   const buyerObjectId = new mongoose.Types.ObjectId(buyer._id)
   const ownerObjectId = new mongoose.Types.ObjectId(currentOwner._id)
+
+  if (buyerObjectId.equals(ownerObjectId || nft.owner)) {
+    throw new AppError('Cant make an action on your own assets!', 400)
+  }
+
+  const creatorWallet = await checkWalletExists(nft.creator, 'creator')
+  const ownerWallet = await checkWalletExists(nft.owner, 'owner')
+
+  const inititalBalances = {
+    creator: creatorWallet.balance,
+    owner: ownerWallet.balance,
+    buyer: buyerWallet.balance,
+  }
+
+  const creatorCommission = (nft.royalties * nft.price!) / 100
+  const onwerPayment = nft.price! - creatorCommission
+
+  // Starting a Transaction - if any query failed changes will be reverted
+  const transactionResults = await Promise.all([
+    Wallet.updateOne({ owner: ownerObjectId }, { $inc: { balance: onwerPayment } }),
+    Wallet.updateOne({ owner: nft.creator }, { $inc: { balance: creatorCommission } }),
+    Wallet.updateOne({ owner: buyer._id }, { $inc: { balance: -nft.price! } }),
+  ])
+
+  // for-loop await for promises, while .forEach does not
+  for (const transaction of transactionResults) {
+    if (transaction.modifiedCount === 0) {
+      await updateWallet(buyerWallet._id, inititalBalances.buyer!)
+      await updateWallet(ownerWallet._id, inititalBalances.owner!)
+      await updateWallet(creatorWallet._id, inititalBalances.creator!)
+
+      throw new AppError('Transaction failed, try again later!', 402)
+    }
+  }
 
   // Transfer NFT ownership
   await currentOwner.updateOne({
@@ -163,7 +186,7 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
   nft.owner = buyerObjectId
   await nft.save()
 
-  // Register trnsaction
+  // Register transaction
   const transactionData = {
     from: buyerObjectId,
     to: ownerObjectId,
@@ -212,13 +235,12 @@ const placeOpenBidOnNFT = async (nftId: string, buyer: IUser, bidValue: number) 
     throw new AppError('NFT has to be listed as Open for bid', 400)
   }
 
-  console.log('Hit')
   // Use Socket.io to manage sending notification to the owner
   return true
 }
 
 // on the client this will be triggered whenever a user Accepts an Open bid
-// Repeated code
+// Repeated code TODO:
 const acceptBid = async ({ nftId, bidderId, bidValue }: IBid, currentOwner: IUser) => {
   await verifyUserWalletFunds(bidderId)
 
@@ -299,13 +321,7 @@ const likeNFT = async (userId: string, nftId: string, user: IUser) => {
 }
 
 // Cast to ObjectId failed for value "{ _id: 'activity' }" (type Object) at path "_id" for model "NFT"
-const getTransactions = async ({
-  next,
-  startIndex,
-}: {
-  next: { limit: number; page: number }
-  startIndex: number
-}) => {
+const getTransactions = async ({ next, startIndex }: IPagination) => {
   const transactions = await Transaction.find()
     .populate('from', 'firstname email _id')
     .populate('to', 'firstname email _id')

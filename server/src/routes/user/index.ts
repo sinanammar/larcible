@@ -4,7 +4,6 @@ import authUser from '../../middleware/authUser'
 import paginate from '../../middleware/paginate'
 
 // Models
-import User from '../../models/user'
 import NFT from '../../models/nft'
 
 import { upload } from '../../utils/avatarMulterConfig'

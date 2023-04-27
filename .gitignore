@@ -1,0 +1,13 @@
+/node_modules
+.DS_Store
+.env
+build
+.eslintrc.js
+.prettierignore
+.prettierrc
+/tsconfig.json
+/app.log
+/jest.config.ts
+.eslintignore
+node_modules
+
