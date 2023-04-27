@@ -19,7 +19,7 @@ export const getAllNFTs = tryCatch(async (req: Request, res: Response) => {
   return res.status(200).send(results)
 })
 
-export const publishNft = tryCatch(async (req: Request, res: Response) => {
+export const createNFT = tryCatch(async (req: Request, res: Response) => {
   const { error } = validateNft(req.body)
 
   if (error) {
@@ -31,7 +31,7 @@ export const publishNft = tryCatch(async (req: Request, res: Response) => {
   // nftData.image = req.file!.filename
   nftData.creator = req.user._id
 
-  const response = await nftService.publishNFT(nftData, req.user)
+  const response = await nftService.createNFT(nftData, req.user)
   return res.status(201).send(response)
 })
 

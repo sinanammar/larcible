@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
 import express from 'express'
-// eslint-disable-next-line import/no-extraneous-dependencies
 const pinoHttp = require('pino-http')()
 import logger from './utils/logger'
 import errorHandler from './middleware/errorHandler'
@@ -39,5 +37,3 @@ app.use('*', (req, res) => res.send('404! URL Not Found.'))
 app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`Server is up on port ${PORT}`))
-
-// Add status successus / failure in Transaction model

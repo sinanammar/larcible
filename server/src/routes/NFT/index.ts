@@ -9,7 +9,7 @@ import paginate from '../../middleware/paginate'
 
 import { uploadNFT } from '../../utils/nftMulterConfig'
 import {
-  publishNft,
+  createNFT,
   getAllNFTs,
   getNFTDetails,
   getNFTsByCategory,
@@ -25,7 +25,7 @@ import {
 const router = express.Router()
 
 router.get('/all', paginate(NFT), getAllNFTs)
-router.post('/upload', authUser, uploadNFT.single('nft'), publishNft)
+router.post('/upload', authUser, uploadNFT.single('nft'), createNFT)
 router.get('/:nftId', getNFTDetails)
 router.get('/category/:cat', paginate(NFT), getNFTsByCategory)
 router.post('/bid/:nftId', authUser, placeBidOnNFT)

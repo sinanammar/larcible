@@ -5,6 +5,7 @@ export interface ITransaction extends Document {
   to: mongoose.Types.ObjectId
   amount: number
   item: mongoose.Types.ObjectId
+  status: string
 }
 
 const transactionSchema = new mongoose.Schema<ITransaction>(
@@ -26,6 +27,11 @@ const transactionSchema = new mongoose.Schema<ITransaction>(
     item: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'NFT',
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ['success', 'fail'],
       required: true,
     },
   },

@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
 require('dotenv').config()
 
 import { IUser, IUserMethods } from '../interfaces/user.interface'
+import wallet from './wallet'
 
 interface UserModel extends Model<IUser, {}, IUserMethods> {
   authenticateUser(
@@ -119,14 +120,3 @@ userSchema.static(
 const User = model<IUser, UserModel>('User', userSchema)
 
 export default User
-
-// userSchema.statics.authenticateUser = async function ({ firstname, password }) {
-//   // eslint-disable-next-line no-use-before-define
-//   const user = await User.findOne({ firstname })
-//   if (!user) throw new Error('Unable to log in, wrong credintials!')
-
-//   const isMatch = await bcrypt.compare(password, user.password)
-//   if (!isMatch) throw new Error('Unable to login, wrong credintials!')
-
-//   return user
-// }

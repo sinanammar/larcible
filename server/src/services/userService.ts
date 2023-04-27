@@ -1,6 +1,6 @@
 import AppError from '../AppError'
 import bcrypt from 'bcrypt'
-import mongoose from 'mongoose'
+
 // Models
 import User from '../models/user'
 
@@ -8,6 +8,8 @@ import User from '../models/user'
 import { IUser, IUserMethods } from '../interfaces/user.interface'
 import { ChangePasswordInterface } from '../interfaces/changePassword.interface'
 import { IPagination } from '../interfaces/pagination.interface'
+import Wallet from '../models/wallet'
+import NFT from '../models/nft'
 
 const registerUser = async (userData: IUser) => {
   const user = new User(userData)
@@ -147,6 +149,8 @@ const deleteUserAvatar = async (user: IUser) => {
 
 const deleteAccount = async (userId: string) => {
   const deletedUser = await User.deleteOne({ _id: userId })
+  await Wallet.findOneAndDelete({ owner: userId })
+  await NFT.findOneAndDelete({ owner: userId })
   return deletedUser
 }
 
@@ -176,8 +180,6 @@ const getOwnedNFTs = async (userId: string, { startIndex, next }: IPagination) =
     })
   return ownedNFTs
 }
-
-// const name = async () => {}
 
 export default {
   loginUser,

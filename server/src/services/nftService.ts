@@ -14,7 +14,7 @@ import { IUser } from '../interfaces/user.interface'
 import { ITransaction } from '../models/transaction'
 import { IPagination } from '../interfaces/pagination.interface'
 
-import { verifyUserWalletFunds } from '../utils/verifyUserWalletFunds'
+import { verifyBuyerWalletFunds } from '../utils/verifyBuyerWalletFunds'
 import checkWalletExists from '../utils/checkWalletExists'
 import updateWallet from '../utils/updateWallet'
 
@@ -23,7 +23,7 @@ const getAllNFTs = async ({ next, startIndex }: IPagination) => {
   return NFTs
 }
 
-const publishNFT = async (nftData: INft, user: IUser) => {
+const createNFT = async (nftData: INft, user: IUser) => {
   const userWallet = await Wallet.findOne({ owner: user._id })
 
   if (!userWallet) {
@@ -76,7 +76,7 @@ const getNFTsByCategory = async (
 // TODO: Subtract the amount from the bidder wallet/ freeze it till the aution ends
 // TODO: write an API to transform the ownership once the auction time-frame finishes
 const placeBidOnNFT = async ({ bidderId, nftId, bidValue }: IBid) => {
-  await verifyUserWalletFunds(bidderId)
+  await verifyBuyerWalletFunds(bidderId)
 
   const nft = await NFT.findById(nftId)
 
@@ -115,7 +115,7 @@ const placeBidOnNFT = async ({ bidderId, nftId, bidValue }: IBid) => {
 
 // Fixed price
 const purchaseNFT = async (nftId: string, buyer: IUser) => {
-  const buyerWallet = await verifyUserWalletFunds(buyer._id)
+  const buyerWallet = await verifyBuyerWalletFunds(buyer._id)
 
   const nft = await NFT.findById(nftId)
 
@@ -171,6 +171,18 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
       await updateWallet(ownerWallet._id, inititalBalances.owner!)
       await updateWallet(creatorWallet._id, inititalBalances.creator!)
 
+      // Register transaction
+      const transactionData = {
+        from: buyerObjectId,
+        to: ownerObjectId,
+        amount: nft.price!,
+        item: nftObjectId,
+        status: 'fail',
+      } as ITransaction
+
+      const transaction = new Transaction(transactionData)
+      await transaction.save()
+
       throw new AppError('Transaction failed, try again later!', 402)
     }
   }
@@ -192,6 +204,7 @@ const purchaseNFT = async (nftId: string, buyer: IUser) => {
     to: ownerObjectId,
     amount: nft.price!,
     item: nftObjectId,
+    status: 'success',
   } as ITransaction
 
   const transaction = new Transaction(transactionData)
@@ -223,7 +236,7 @@ const toggleNFTStatus = async (nftId: string, owner: IUser) => {
 
 // Use Socket.io
 const placeOpenBidOnNFT = async (nftId: string, buyer: IUser, bidValue: number) => {
-  const buyerWallet = await verifyUserWalletFunds(buyer._id)
+  const buyerWallet = await verifyBuyerWalletFunds(buyer._id)
   const nftObjectId = new mongoose.Types.ObjectId(nftId)
 
   const nft = await NFT.findById(nftObjectId)
@@ -242,7 +255,7 @@ const placeOpenBidOnNFT = async (nftId: string, buyer: IUser, bidValue: number) 
 // on the client this will be triggered whenever a user Accepts an Open bid
 // Repeated code TODO:
 const acceptBid = async ({ nftId, bidderId, bidValue }: IBid, currentOwner: IUser) => {
-  await verifyUserWalletFunds(bidderId)
+  await verifyBuyerWalletFunds(bidderId)
 
   const ownerObjectId = new mongoose.Types.ObjectId(currentOwner._id)
   const bidderObjectId = new mongoose.Types.ObjectId(bidderId)
@@ -335,7 +348,7 @@ const getTransactions = async ({ next, startIndex }: IPagination) => {
 }
 
 export default {
-  publishNFT,
+  createNFT,
   getNFTDetails,
   getNFTsByCategory,
   placeBidOnNFT,
