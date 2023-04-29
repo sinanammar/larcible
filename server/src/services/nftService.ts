@@ -18,10 +18,8 @@ import { verifyBuyerWalletFunds } from '../utils/verifyBuyerWalletFunds'
 import checkWalletExists from '../utils/checkWalletExists'
 import updateWallet from '../utils/updateWallet'
 
-const getAllNFTs = async ({ next, startIndex }: IPagination) => {
-  const NFTs = await NFT.find().limit(next.limit).skip(startIndex)
-  return NFTs
-}
+const getAllNFTs = async ({ next, startIndex }: IPagination) =>
+  await NFT.find().limit(next.limit).skip(startIndex)
 
 const createNFT = async (nftData: INft, user: IUser) => {
   const userWallet = await Wallet.findOne({ owner: user._id })

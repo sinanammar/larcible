@@ -10,4 +10,5 @@ build
 /jest.config.ts
 .eslintignore
 node_modules
+client/tsconfig.json
 

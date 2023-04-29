@@ -5,11 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "name": "Launch App",
       "request": "launch",
-      "name": "Launch Program",
+      "type": "node",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/server/src/index.js"
+      "program": "${workspaceFolder}/server/src/index.ts"
     }
   ]
 }

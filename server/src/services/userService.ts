@@ -13,11 +13,13 @@ import NFT from '../models/nft'
 
 const registerUser = async (userData: IUser) => {
   const user = new User(userData)
-
+  console.log(user)
   const token = user.generateAccessToken()
   await user.save()
 
   if (!user) throw new AppError('Something went wrong', 500)
+  console.log(user)
+  console.log(token)
   return { user, token }
 }
 

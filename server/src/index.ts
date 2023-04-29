@@ -13,7 +13,7 @@ import walletRouter from './routes/wallet/index'
 
 export const app = express()
 const apiRouter = express.Router()
-const PORT = 3000
+const PORT = 3001
 
 // app.use(pinoHttp)
 app.use(express.json())
