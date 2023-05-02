@@ -1,0 +1,67 @@
+.nav-bar-content {
+  height: 107px;
+  display: flex;
+  justify-content: center;
+}
+
+.active {
+  color: #2571ea;
+}
+
+.idle-light {
+  color: rgb(0, 0, 0);
+}
+
+input.search-box {
+  width: 200px;
+}
+
+.pages {
+  font-size: 16px;
+  font-family: 'poppins';
+  font-weight: 500;
+
+  margin-left: 48px;
+  cursor: pointer;
+}
+
+.logo {
+  width: 186px;
+  height: 50px;
+}
+
+button.signin-btn-light {
+  font-size: 16px;
+  font-weight: 500;
+  height: 56px;
+  width: 100px;
+}
+
+button.signin-btn-light:hover {
+  background-color: white;
+  font-size: 16px;
+  font-weight: 500;
+  height: 56px;
+  width: 100px;
+}
+
+button.wallet-btn {
+  height: 56px;
+  width: 171px;
+  font-weight: 500;
+  background-color: #2571ea;
+  color: white;
+}
+
+button.wallet-btn:hover {
+  font-size: 16px;
+  font-weight: 500;
+  height: 56px;
+  width: 171px;
+  background-color: #f4a7a5;
+  color: white;
+}
+
+svg.community-icon {
+  color: #a3a3a3;
+}

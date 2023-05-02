@@ -1,0 +1,18 @@
+.idle-dark {
+  color: rgb(255, 255, 255);
+}
+
+button.signin-btn-dark {
+  font-size: 16px;
+  font-weight: 500;
+  height: 56px;
+  width: 100px;
+}
+
+button.signin-btn-dark:hover {
+  background-color: rgb(26, 26, 26);
+  font-size: 16px;
+  font-weight: 500;
+  height: 56px;
+  width: 100px;
+}

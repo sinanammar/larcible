@@ -1,0 +1,24 @@
+.card-wrapper-light {
+  margin-top: 16px;
+  background-color: #f8f8f8;
+  width: 280px;
+  height: 520px;
+  cursor: pointer;
+}
+
+div.card-content-light {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 500;
+  padding: 0px 16px;
+}
+
+.name-light {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.creator-rights-light {
+  align-items: flex-start;
+  padding-left: 8px;
+}
