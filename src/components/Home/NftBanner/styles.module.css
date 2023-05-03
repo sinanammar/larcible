@@ -1,3 +1,9 @@
+.title-light {
+  font-size: 48px;
+  font-weight: 700;
+  color: #060707;
+}
+
 .title-dark {
   font-size: 48px;
   font-weight: 700;
@@ -16,8 +22,8 @@
 
 .content-icon {
   position: absolute;
-  top: 30px;
-  left: 22px;
+  top: 37px;
+  left: 37px;
   height: 33px;
   width: 55px;
 }
@@ -29,6 +35,7 @@
   border-radius: 45px;
   background-color: rgb(37, 113, 234, 0.1);
   color: #2571ea;
+  margin-bottom: 12px;
 }
 
 .content-wrapper {
@@ -39,6 +46,7 @@
   font-size: 24px;
   font-weight: 600;
   white-space: nowrap;
+  text-align: start;
 }
 
 .content-desc {

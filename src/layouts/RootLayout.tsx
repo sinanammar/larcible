@@ -15,12 +15,17 @@ const RootLayout = () => {
         <GridItem colSpan={1} minH="100vh" bg={theme}></GridItem>
         <GridItem colSpan={6} minH="100vh" bg={theme}>
           <NavBar />
-
           <Outlet />
         </GridItem>
         <GridItem colSpan={1} minH="100vh" bg={theme}></GridItem>
       </Grid>
-      <Footer />
+      <Grid templateColumns="repeat(8, 1fr)">
+        <GridItem colSpan={1} bg={'black'}></GridItem>
+        <GridItem colSpan={6} bg={'black'}>
+          <Footer />
+        </GridItem>
+        <GridItem colSpan={1} bg={'black'}></GridItem>
+      </Grid>
     </Box>
   )
 }

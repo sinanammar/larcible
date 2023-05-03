@@ -35,3 +35,5 @@ const App = () => {
 }
 
 export default App
+
+// TODO: add code for CollectionCard Component

@@ -1,9 +1,8 @@
-import './styles-light.css'
-import './styles-dark.css'
+import styles from './styles.module.css'
 import { Box, Button, HStack, Text, VStack, SimpleGrid } from '@chakra-ui/react'
 
 // Components
-import NftCard from '../../NftCard/NftCard'
+import NftCard from '../../UI/NftCard/NftCard'
 
 import useColorModeStore from '../../../store/colorModeStore'
 
@@ -49,28 +48,41 @@ const NFTLIST = [
     creator: 'Dang dough',
     currendtBid: '0.001',
   },
+  {
+    id: '6',
+    name: 'A brush with arts',
+    creator: 'Dang dough',
+    currendtBid: '0.001',
+  },
+  {
+    id: '7',
+    name: 'A brush with arts',
+    creator: 'Dang dough',
+    currendtBid: '0.001',
+  },
+  {
+    id: '8',
+    name: 'A brush with arts',
+    creator: 'Dang dough',
+    currendtBid: '0.001',
+  },
 ]
 
 const ExploreNft = () => {
   const { colorMode } = useColorModeStore()
-  const header = colorMode === 'dark' ? 'title-dark' : 'title-light'
-  const title = colorMode === 'dark' ? 'title-dark' : 'title-light'
-  const btn = colorMode === 'dark' ? 'btn-dark' : 'btn-light'
-  const filterBtnWrapper =
-    colorMode === 'dark' ? 'filter-btn-wrapper-dark' : 'filter-btn-wrappern-light'
 
   return (
-    <Box className="explore-wrapper">
-      <Box className="main-light">
-        <VStack className="info-light">
-          <Text className={title}>Explore NFT Art</Text>
-          <Text alignSelf="flex-start">
+    <Box className={styles['explore-wrapper']}>
+      <Box className={styles['main-light']}>
+        <VStack className={styles['info-light']}>
+          <Text className={styles[`title-${colorMode}`]}>Explore NFT Art</Text>
+          <Text className={styles.desc}>
             Buy and sell NFTs from the worlds top artists
           </Text>
         </VStack>
-        <Button className={btn}>Explore More</Button>
+        <Button className={styles[`btn-${colorMode}`]}>Explore More</Button>
       </Box>
-      <HStack className={filterBtnWrapper} mb="48px" gap={4}>
+      <HStack className={styles[`filter-btn-${colorMode}`]} mb="48px" gap={4}>
         {FILTER_CATEGORIES.map((category) => (
           <FilterButton key={category} category={category} />
         ))}
@@ -96,6 +108,5 @@ export default ExploreNft
 
 const FilterButton = ({ category }: { category: string }) => {
   const { colorMode } = useColorModeStore()
-  const filterBtn = colorMode === 'dark' ? 'filter-btn-dark' : 'filter-btn-light'
-  return <Button className={filterBtn}>{category as any}</Button>
+  return <Button className={styles[`filter-btn-${colorMode}`]}>{category as any}</Button>
 }

@@ -1,0 +1,12 @@
+p.banner-title-dark {
+  position: absolute;
+  top: 48%;
+  right: 46%;
+  font-weight: 500;
+  line-height: 28px;
+  color: #a4a6ab;
+}
+
+.image-wrapper {
+  position: relative;
+}

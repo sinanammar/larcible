@@ -1,0 +1,100 @@
+.card-wrapper-light {
+  margin-top: 16px;
+  background-color: #f8f8f8;
+  width: 330px;
+  height: 510px;
+  cursor: pointer;
+}
+
+.card-wrapper-light:hover {
+  margin-top: 16px;
+  background-color: #ffffff;
+  width: 330px;
+  height: 510px;
+  cursor: pointer;
+  box-shadow: 4px 4px 10px rgb(224, 224, 224);
+}
+
+.card-wrapper-dark {
+  margin-top: 16px;
+  background-color: rgba(29, 29, 29, 1);
+  width: 330px;
+  height: 510px;
+  cursor: pointer;
+}
+
+.card-wrapper-dark:hover {
+  margin-top: 16px;
+  background-color: rgb(255, 255, 255);
+  color: black;
+  width: 330px;
+  height: 510px;
+  cursor: pointer;
+}
+
+div.card-content {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 500;
+  padding: 0px 16px;
+}
+
+.name-light {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+div.creator-rights-light {
+  align-items: flex-start;
+  text-align: start;
+  padding-left: 8px;
+}
+
+/* Only light applied */
+div.card-content-dark {
+  background-color: whitesmoke;
+  display: flex;
+  align-items: flex-start;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+.name {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+/* .card-wrapper-light {
+  margin-top: 16px;
+  background-color: #f8f8f8;
+  width: 330px;
+  height: 510px;
+  cursor: pointer;
+}
+
+.card-wrapper-light:hover {
+  margin-top: 16px;
+  background-color: #ffffff;
+  width: 330px;
+  height: 510px;
+  cursor: pointer;
+  box-shadow: 4px 4px 10px rgb(224, 224, 224);
+}
+
+div.card-content-light {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 500;
+  padding: 0px 16px;
+}
+
+.name-light {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+div.creator-rights-light {
+  align-items: flex-start;
+  text-align: start;
+  padding-left: 8px;
+} */

@@ -1,5 +1,5 @@
-import './styles-light.css'
-import './styles-dark.css'
+import styles from './styles.module.css'
+// import './styles-dark.css'
 import { SearchIcon } from '@chakra-ui/icons'
 
 import { Box, VStack, Text, HStack, IconProps, Icon } from '@chakra-ui/react'
@@ -9,17 +9,16 @@ import useColorModeStore from '../../../store/colorModeStore'
 const NftBanner = () => {
   const { colorMode } = useColorModeStore()
 
-  const titleClass = colorMode === 'dark' ? 'title-dark' : 'title-light'
   return (
-    <Box>
+    <Box mb="90px">
       <VStack gap={24}>
         <VStack>
-          <Text className={titleClass}>Create and sell Your NFTs</Text>
-          <Text className="sub-title">
+          <Text className={styles[`title-${colorMode}`]}>Create and sell Your NFTs</Text>
+          <Text className={styles['sub-title']}>
             Buy and sell NFTs from the world's top artists
           </Text>
         </VStack>
-        <HStack className="content" gap={1}>
+        <HStack className={styles.content} gap={1}>
           <Content
             title="Set Up your Wallet"
             description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
@@ -58,12 +57,12 @@ const Content = ({
   icon: React.ElementType<IconProps>
 }) => {
   return (
-    <VStack className="content-wrapper">
-      <Box className="icon-wrapper">
-        <Icon as={icon} className="content-icon" />
+    <VStack className={styles['content-wrapper']} alignItems="flex-start">
+      <Box className={styles['icon-wrapper']}>
+        <Icon as={icon} className={styles['content-icon']} />
       </Box>
       <Text>{title}</Text>
-      <Text className="content-desc">{description}</Text>
+      <Text className={styles['content-desc']}>{description}</Text>
     </VStack>
   )
 }

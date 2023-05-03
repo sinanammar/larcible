@@ -45,7 +45,7 @@ const NavBar = () => {
   }
 
   return (
-    <Box className="nav-bar-content">
+    <Box className="nav-bar-content" id="top">
       <HStack spacing={'64px'}>
         <Box className="logo">
           <Link to="/">

@@ -1,0 +1,23 @@
+.title-light {
+  color: black;
+  font-size: 48px;
+  font-weight: 700;
+  margin-top: 95px;
+  align-self: flex-start;
+}
+
+.title-dark {
+  color: rgb(255, 255, 255);
+  font-size: 48px;
+  font-weight: 700;
+  margin-top: 95px;
+  align-self: flex-start;
+}
+
+.desc {
+  color: #8d939b;
+  align-self: flex-start;
+  margin-bottom: 32px;
+
+  padding-bottom: 32px;
+}

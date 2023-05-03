@@ -1,0 +1,54 @@
+.img {
+  position: relative;
+}
+
+h1.banner-title-light {
+  position: absolute;
+  top: 18%;
+  right: 54%;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 54px;
+}
+
+p.banner-title-light {
+  position: absolute;
+  top: 48%;
+  right: 46%;
+  font-weight: 500;
+  line-height: 28px;
+  color: #5e6066;
+}
+
+p.banner-title-light {
+  position: absolute;
+  top: 48%;
+  right: 44%;
+  font-weight: 500;
+  line-height: 28px;
+  color: #5e6066;
+}
+
+button.create-btn {
+  position: absolute;
+  top: 75%;
+  right: 68%;
+  color: white;
+  height: 56px;
+  width: 182px;
+  background-color: #2571ea;
+}
+
+button.create-btn:hover {
+  position: absolute;
+  top: 75%;
+  right: 68%;
+  color: white;
+  height: 56px;
+  width: 182px;
+  background-color: #f4a7a5;
+}
+
+.image-wrapper {
+  position: relative;
+}

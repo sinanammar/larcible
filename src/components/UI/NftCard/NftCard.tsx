@@ -1,5 +1,4 @@
-import './styles-light.css'
-import './styles-dark.css'
+import styles from './styles.module.css'
 import {
   Box,
   Card,
@@ -12,7 +11,7 @@ import {
   Avatar,
 } from '@chakra-ui/react'
 
-import useColorModeStore from '../../store/colorModeStore'
+import useColorModeStore from '../../../store/colorModeStore'
 
 interface INFT {
   id: string
@@ -23,24 +22,19 @@ interface INFT {
 const NftCard = ({ id, name, creator, currentBid }: INFT) => {
   const { colorMode } = useColorModeStore()
 
-  const cardWrapper = colorMode === 'dark' ? 'card-wrapper-dark' : 'card-wrapper-light'
-  const nftName = colorMode === 'dark' ? 'name-dark' : 'name-light'
-  const creatorRights =
-    colorMode === 'dark' ? 'creator-rights-dark' : 'creator-rights-light'
-
   const bgColor = colorMode === 'dark' ? '#1f2020' : '#F8F8F8'
 
   return (
-    <Card className={cardWrapper} bg={bgColor}>
+    <Card className={styles[`card-wrapper-${colorMode}`]} bg={bgColor}>
       <CardHeader>
         <Image src="./image.png" w="285px" h="300px" />
       </CardHeader>
-      <CardBody className="card-content-light">
+      <CardBody className={styles['card-content']}>
         <VStack>
-          <Text className={nftName}>{name}</Text>
+          <Text className={styles.name}>{name}</Text>
           <HStack>
             <Avatar />
-            <VStack className={creatorRights}>
+            <VStack className={styles[`creator-rights-${colorMode}`]}>
               <Text>Creator</Text>
               <Text>{creator}</Text>
             </VStack>

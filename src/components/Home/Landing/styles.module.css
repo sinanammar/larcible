@@ -1,0 +1,123 @@
+.landing-light {
+  height: 792px;
+  background-image: linear-gradient(
+    to top,
+    white,
+    transparent 20%,
+    transparent 70%,
+    white
+  );
+  padding: 50px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.landing-dark {
+  height: 792px;
+  background-image: linear-gradient(
+    to top,
+    rgb(0, 0, 0),
+    transparent 30%,
+    transparent 70%,
+    rgb(0, 0, 0)
+  );
+  padding: 50px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.main-light {
+  font-size: 80px;
+  font-weight: 800;
+  line-height: 90px;
+  color: black;
+}
+
+.main-dark {
+  font-size: 80px;
+  font-weight: 800;
+  line-height: 90px;
+  color: white;
+}
+
+.sub-light {
+  font-size: 24px;
+  font-weight: 600;
+  color: rgba(52, 52, 52, 0.6);
+  padding: 32px 0;
+}
+
+.sub-dark {
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(255, 255, 255, 0.4);
+  padding: 32px 0;
+}
+
+button.action-btn {
+  color: white;
+  margin-top: 0px;
+  background-color: rgba(37, 113, 234, 1);
+  font-weight: 00;
+  padding: 16px 24px;
+  height: 56px;
+}
+
+button.action-btn:hover {
+  margin-top: 0px;
+  background-color: #f4a7a5;
+  padding: 16px 24px;
+}
+
+button.secondary-btn-light {
+  background-color: white;
+  border: 1px solid #cdcdcd;
+  border-radius: 8px;
+  padding: 16px 24px;
+  font-weight: 600;
+  height: 56px;
+}
+
+button.secondary-btn-light:hover {
+  background-color: #f4a7a5;
+  color: white;
+  border: 1px solid #cdcdcd;
+  border-radius: 8px;
+  padding: 16px 24px;
+  font-weight: 600;
+  height: 56px;
+}
+button.secondary-btn-dark {
+  background-color: black;
+  border: 1px solid white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  height: 56px;
+}
+
+button.secondary-btn-dark:hover {
+  background-color: #f4a7a5;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  height: 56px;
+}
+
+.nft {
+  position: relative;
+  display: inline;
+}
+
+.nft::after {
+  content: 'NFT';
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(122.82deg, #de4875 51.65%, #f5a8a4 63.29%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

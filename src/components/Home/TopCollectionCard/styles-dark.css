@@ -1,0 +1,30 @@
+.collection-card-dark {
+  margin-top: 32px;
+  width: 412px;
+  height: 356px;
+  border-radius: 12px;
+  background-color: #1d1d1d;
+}
+
+.collection-img-dark {
+  border-radius: 8px;
+}
+
+.card-info-light {
+  padding-top: 0px;
+}
+
+.card-info-dark {
+  padding-top: 12px;
+  justify-content: space-between;
+}
+
+.card-body-dark:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(37, 113, 234, 1) 27%,
+    rgba(244, 167, 165, 1) 79%
+  );
+
+  border-radius: 8px;
+}

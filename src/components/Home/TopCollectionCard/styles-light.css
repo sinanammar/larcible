@@ -1,0 +1,26 @@
+.collection-card-light {
+  width: 512px;
+  height: 385px;
+  border-radius: 12px;
+  background-color: #f8f8f8;
+  /* margin-top: 32px; */
+}
+
+.collection-img-light {
+  border-radius: 8px;
+}
+
+.card-info-light {
+  padding-top: 12px;
+  justify-content: space-between;
+}
+
+.card-body-light:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(37, 113, 234, 1) 27%,
+    rgba(244, 167, 165, 1) 79%
+  );
+  color: white;
+  border-radius: 8px;
+}
