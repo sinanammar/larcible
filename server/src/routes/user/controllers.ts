@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { Request, Response } from 'express'
 import AppError from '../../AppError'
 
@@ -19,12 +20,14 @@ export const registerUser = tryCatch(async (req: Request, res: Response) => {
   if (error) {
     throw new Error(error)
   }
+  console.log('HIT')
+  res.send('Testing')
 
-  const response = await userService.registerUser(req.body)
-  return res
-    .status(200)
-    .cookie('jwt', response.token, { maxAge: 9000000 })
-    .send(response.user)
+  // const response = await userService.registerUser(req.body)
+  // return res
+  //   .status(201)
+  //   .cookie('jwt', response.token, { maxAge: 9000000 })
+  //   .send(response.user)
 })
 
 export const loginUser = tryCatch(async (req: Request, res: Response) => {
@@ -65,6 +68,7 @@ export const followUser = tryCatch(async (req: Request, res: Response) => {
 
 export const unFollowUser = tryCatch(async (req: Request, res: Response) => {
   const followerId = req.user._id
+
   const followedId = req.params.id
   isValidObjectId(followedId)
   const resposne = await userService.unFollowUser(followerId, followedId)
@@ -146,8 +150,9 @@ export const deleteAccount = tryCatch(async (req: Request, res: Response) => {
 export const getCreatedNFTs = tryCatch(async (req: Request, res: Response) => {
   const userId = req.params.userId.trim()
   isValidObjectId(userId)
+  const userObjectId = new mongoose.Types.ObjectId(userId)
 
-  const response = await userService.getCreatedNFTs(userId, req.paginationInfo)
+  const response = await userService.getCreatedNFTs(userObjectId, req.paginationInfo)
   const result = {
     response,
     ...req.paginationInfo,

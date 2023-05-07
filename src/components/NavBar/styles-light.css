@@ -12,8 +12,14 @@
   color: rgb(0, 0, 0);
 }
 
-input.search-box {
+input.search-box-light {
   width: 200px;
+  border-color: #ced4da;
+  color: #ced4da;
+}
+
+.search-box-light ::placeholder {
+  color: rgba(6, 7, 7, 1);
 }
 
 .pages {

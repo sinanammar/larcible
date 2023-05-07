@@ -15,10 +15,42 @@ import {
 
 const LiveBidding = () => {
   const { colorMode } = useColorModeStore()
+
+  let btn_styles = {
+    h: '56px',
+    w: '151px',
+    bg: 'white',
+    border: '1px solid #cdcdcd',
+    borderRadius: '8px',
+    p: '16px 24px',
+    '&:hover': {
+      bg: '#f4a7a5',
+      color: '',
+    },
+  }
+
+  if (colorMode === 'dark') {
+    btn_styles = {
+      bg: 'black',
+      w: '151px',
+      h: '56px',
+      border: '1px solid #cdcdcd',
+      borderRadius: '8px',
+      p: '16px 24px',
+      '&:hover': {
+        bg: '#f4a7a5',
+        color: 'white',
+      },
+    }
+  }
+
   return (
     <Box className={styles[`wrapper-${colorMode}`]}>
       <VStack>
-        <Text className={styles[`main-title-${colorMode}`]}>Live ART Bidding</Text>
+        <Text className={styles[`main-title-${colorMode}`]}>
+          {' '}
+          &#128525; Live ART Bidding
+        </Text>
         <Text className={styles[`sub-title-${colorMode}`]}>
           Buy and sell NFTs from the world's top artists
         </Text>
@@ -62,7 +94,9 @@ const LiveBidding = () => {
                   <Text>Owner</Text>
                 </VStack>
               </Box>
-              <Button className={styles[`explore-btn-${colorMode}`]}>Explore Work</Button>
+              <Button sx={btn_styles} className={styles[`explore-btn-${colorMode}`]}>
+                Explore Work
+              </Button>
             </HStack>
           </VStack>
         </HStack>
@@ -72,3 +106,26 @@ const LiveBidding = () => {
 }
 
 export default LiveBidding
+
+const dark_styles = {
+  h: '56px',
+  w: '151px',
+  bg: 'white',
+  border: '1px solid #cdcdcd',
+  '&:hover': {
+    bg: '#f4a7a5',
+  },
+}
+
+const light_styles = {
+  bg: 'white',
+  w: '56px',
+  h: '151px',
+  border: '1px solid #cdcdcd',
+  borderRadius: '8px',
+  p: '16px 24px',
+  '&:hover': {
+    bg: '#f4a7a5',
+    color: 'white',
+  },
+}

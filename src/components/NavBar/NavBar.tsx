@@ -29,12 +29,7 @@ const NavBar = () => {
   const { colorMode, setColorMode } = useColorModeStore()
   const isDark = colorMode === 'dark'
 
-  const buttonClass = classnames('idle', {
-    'idle-light': colorMode === 'light',
-    'idle-dark': colorMode === 'dark',
-  })
-
-  const signInClass = colorMode === 'dark' ? 'signin-btn-dark' : 'signin-btn-light'
+  const signin_class = colorMode === 'dark' ? 'signin-btn-dark' : 'signin-btn-light'
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', colorMode)
@@ -86,19 +81,23 @@ const NavBar = () => {
           </Link>
         </HStack>
         <HStack spacing={'64px'}>
-          <InputGroup className="search-box">
+          <InputGroup className={`search-box-${colorMode}`}>
             <InputRightElement>
               <SearchIcon />
             </InputRightElement>
-            <Input placeholder="search" />
+            <Input placeholder="search" className={`search-box-${colorMode}`} />
           </InputGroup>
           TODO:
           <Switch isChecked={isDark} onChange={toggleColorMode} />
           <HStack>
-            <Button variant="ghost" className={signInClass}>
-              Sign In
-            </Button>
-            <Button className="wallet-btn">Connect wallet</Button>
+            <Link to="/signin">
+              <Button variant="ghost" className={signin_class}>
+                Sign In
+              </Button>
+            </Link>
+            <Link to="connect-wallet">
+              <Button className="wallet-btn">Connect wallet</Button>
+            </Link>
           </HStack>
         </HStack>
       </HStack>

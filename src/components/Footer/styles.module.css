@@ -75,6 +75,11 @@ input.firstrow {
   color: white;
   font-weight: bold;
   padding-bottom: 12px;
+  text-align: start;
+}
+
+.footer-col {
+  align-items: baseline;
 }
 
 .rights {

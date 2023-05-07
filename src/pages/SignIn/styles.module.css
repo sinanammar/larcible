@@ -1,0 +1,113 @@
+.wrapper-light {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.wrapper-dark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+div.main-box-light {
+  background-color: #ffffff;
+  padding-top: 54px;
+  height: 810;
+  width: 620px;
+  box-shadow: 12px 12px 100px rgba(206, 206, 206, 0.3);
+  border-radius: 20px;
+}
+
+div.main-box-dark {
+  padding-top: 54px;
+  background-color: #1c1c1c;
+  height: 810;
+  width: 620px;
+  border-radius: 20px;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.larcible {
+  display: inline;
+}
+
+.larcible::after {
+  content: 'Larcible';
+  background-image: linear-gradient(
+    90.34deg,
+    #2571ea 0.53%,
+    #7185d0 29.11%,
+    #f5a8a4 78.24%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sub-title {
+  padding-top: 16px;
+  padding-bottom: 48px;
+  color: #9b9c9c;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.btn-wrapper {
+  padding-top: 48px;
+  padding-bottom: 32px;
+  justify-content: space-between;
+  width: 87%;
+}
+
+.action-btn {
+  width: 238px;
+  height: 54px;
+  background-color: transparent;
+  border: 1px solid #2571ea;
+  border-radius: 8px;
+}
+
+.form-dark {
+  width: 512px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-light {
+  width: 512px;
+  font-size: 14px;
+  color: #494a4a;
+}
+
+.input {
+  height: 44px;
+  border-color: #e0e4e8;
+}
+
+button.login-btn {
+  width: 100%;
+  background-color: #2571ea;
+  color: white;
+  height: 54px;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.redirect {
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+span.redirect {
+  color: #2571ea;
+  display: inline;
+  text-decoration: underline;
+}

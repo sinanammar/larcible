@@ -11,6 +11,8 @@ import { IPagination } from '../interfaces/pagination.interface'
 import Wallet from '../models/wallet'
 import NFT from '../models/nft'
 
+import { Types } from 'mongoose'
+
 const registerUser = async (userData: IUser) => {
   const user = new User(userData)
   console.log(user)
@@ -46,7 +48,7 @@ const fetchUserProfile = async (userId: string) => {
   return userProfile
 }
 
-const followUser = async (followerId: string, followedId: string) => {
+const followUser = async (followerId: Types.ObjectId, followedId: string) => {
   await User.findByIdAndUpdate(followerId, {
     $addToSet: { following: followedId },
   }).select('-avatar')
@@ -93,7 +95,7 @@ const fetchFollowers = async (userId: string) => {
 }
 
 const editUserProfile = async (
-  userId: string,
+  userId: Types.ObjectId,
   updates: { firstname: string; email: string },
 ) => {
   const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updates, {
@@ -149,14 +151,17 @@ const deleteUserAvatar = async (user: IUser) => {
   return user
 }
 
-const deleteAccount = async (userId: string) => {
+const deleteAccount = async (userId: Types.ObjectId) => {
   const deletedUser = await User.deleteOne({ _id: userId })
   await Wallet.findOneAndDelete({ owner: userId })
   await NFT.findOneAndDelete({ owner: userId })
   return deletedUser
 }
 
-const getCreatedNFTs = async (userId: string, { startIndex, next }: IPagination) => {
+const getCreatedNFTs = async (
+  userId: Types.ObjectId,
+  { startIndex, next }: IPagination,
+) => {
   const createdNFTs = await User.findById(userId)
     .select('created')
     .populate({
@@ -170,7 +175,10 @@ const getCreatedNFTs = async (userId: string, { startIndex, next }: IPagination)
   return createdNFTs
 }
 
-const getOwnedNFTs = async (userId: string, { startIndex, next }: IPagination) => {
+const getOwnedNFTs = async (
+  userId: Types.ObjectId,
+  { startIndex, next }: IPagination,
+) => {
   const ownedNFTs = await User.find({ _id: userId })
     .select('ownedNFTs')
     .populate({

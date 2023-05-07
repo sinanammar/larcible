@@ -1,0 +1,41 @@
+.title {
+  font-size: 48px;
+  font-weight: 700;
+  padding-top: 88px;
+  text-align: center;
+  padding-bottom: 16px;
+  letter-spacing: 0.07rem;
+}
+
+.sub-title-light {
+  font-size: 18px;
+  color: rgba(135, 135, 135, 0.713);
+  padding-bottom: 48px;
+  text-align: center;
+  padding-bottom: 90px;
+}
+
+.sub-title-dark {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.472);
+  padding-bottom: 48px;
+  text-align: center;
+  padding-bottom: 90px;
+}
+
+.content-light {
+  color: #6a6a6a;
+  font-weight: 500;
+}
+
+.content-dark {
+  color: #9b9c9c;
+  font-weight: 500;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: 600;
+  padding-top: 32px;
+  padding-bottom: 24px;
+}

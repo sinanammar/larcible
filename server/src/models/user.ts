@@ -1,4 +1,4 @@
-import { Model, Schema, model, HydratedDocument } from 'mongoose'
+import mongoose, { Model, Schema, model, Types, HydratedDocument } from 'mongoose'
 
 import validator from 'validator'
 import bcrypt from 'bcrypt'
@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken'
 require('dotenv').config()
 
 import { IUser, IUserMethods } from '../interfaces/user.interface'
-import wallet from './wallet'
 
 interface UserModel extends Model<IUser, {}, IUserMethods> {
   authenticateUser(

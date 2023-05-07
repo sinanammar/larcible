@@ -1,4 +1,4 @@
-.arrow-nav-btn-dark {
+.arrow-nav-dark {
   background-color: rgb(0, 0, 0);
   width: 48px;
   height: 48px;
@@ -7,7 +7,7 @@
   margin-left: 16px;
 }
 
-.arrow-nav-btn-dark:hover {
+.arrow-nav-dark:hover {
   background-color: #2571ea;
   width: 48px;
   height: 48px;
@@ -16,7 +16,7 @@
   margin-left: 16px;
 }
 
-.arrow-nav-btn-light {
+.arrow-nav-light {
   background-color: rgb(255, 255, 255);
   width: 48px;
   height: 48px;
@@ -25,7 +25,7 @@
   margin-left: 16px;
 }
 
-.arrow-nav-btn-light:hover {
+.arrow-nav-light:hover {
   background-color: #2571ea;
   color: white;
   width: 48px;

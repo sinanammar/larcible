@@ -1,5 +1,7 @@
+import { Types } from 'mongoose'
+
 export interface ChangePasswordInterface {
-  userId: string
+  userId: Types.ObjectId
   savedPassword: string
   currentPassword: string
   newPassword: string

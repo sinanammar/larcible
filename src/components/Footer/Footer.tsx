@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { ArrowUpIcon } from '@chakra-ui/icons'
 import styles from './styles.module.css'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
@@ -37,21 +38,21 @@ const Footer = () => {
             </Text>
           </Box>
         </VStack>
-        <VStack>
+        <VStack className={styles['footer-col']}>
           <Text className={styles['main-title']}>Support</Text>
           <Text>Community</Text>
           <Text>Guidelines</Text>
           <Text>Chat with us</Text>
           <Text></Text>
         </VStack>
-        <VStack>
+        <VStack className={styles['footer-col']}>
           <Text className={styles['main-title']}>Company</Text>
           <Text>About</Text>
           <Text>FAQ</Text>
           <Text>Marketplace</Text>
           <Text>Blog</Text>
         </VStack>
-        <VStack>
+        <VStack className={styles['footer-col']}>
           <Text className={styles['main-title']}>Explore</Text>
           <Text>Art</Text>
           <Text>Collection</Text>
@@ -63,7 +64,9 @@ const Footer = () => {
         <Box display="flex" justifyContent="space-between" w="550px">
           <Text>© 2023 Larcible. All Rights reserved</Text>
           <Text>Privacy Policy</Text>
-          <Text>terms of service</Text>
+          <Link to="terms-of-services">
+            <Text>terms of service</Text>
+          </Link>
         </Box>
 
         <Box className={styles['outer-box']}>

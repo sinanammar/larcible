@@ -9,11 +9,13 @@ import TopCollections from '../../components/Home/TopCollections/TopCollections'
 import RecommendedArt from '../../components/Home/RecommendedArt/RecommendedArt'
 import Landing from '../../components/Home/Landing/Landing'
 import LiveBidding from '../../components/Home/Live Bidding/LiveBidding'
+import TopCreator from '../../components/Home/TopCreator/TopCreator'
 
 const Home = () => {
   return (
     <Box h="100%">
       <Landing />
+      <TopCreator />
       <LiveBidding />
       <ExploreNft />
       <PopularCollections />

@@ -16,3 +16,13 @@ button.signin-btn-dark:hover {
   height: 56px;
   width: 100px;
 }
+
+input.search-box-dark {
+  width: 200px;
+  border-color: #ced4da;
+  color: #ced4da;
+}
+
+.search-box-dark ::placeholder {
+  color: #ced4da;
+}
